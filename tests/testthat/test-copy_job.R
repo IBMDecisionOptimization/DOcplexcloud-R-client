@@ -3,36 +3,43 @@ require(docplexcloud)
 source('credentials.R')
 
 createJob <- function(client) {
-    print("create job")
-    job <- DOcplexcloudJob(client=client)
-    print("set attachment")
-    job <- setAttachment(job, file="sample_diet.lp")
-    print("submit job")
-    job <- create(job)
-    print("execute job")
-    job <- execute(job)
-    status <- waitForCompletion(job)
-    print(paste("Job finished with status ", status, sep=""))
-    
-    solution.json <- getAttachment(job, "solution.json")
-    writeBin(solution.json, "solution1.json")
-    
-    return(job)
+    job <= None
+    tryCatch({
+        print("create job")
+        job <- DOcplexcloudJob(client=client)
+        print("set attachment")
+        job <- setAttachment(job, file="sample_diet.lp")
+        print("submit job")
+        job <- create(job)
+        print("execute job")
+        job <- execute(job)
+        status <- waitForCompletion(job)
+        print(paste("Job finished with status ", status, sep=""))
+        
+        solution.json <- getAttachment(job, "solution.json")
+        write(solution, toJSON("solution1.json"))
+    },
+    finally = {
+        return(job)
+    })
 }
 
 testCopy <- function(job) {
-    client <- job$client
-    
-    # copy job
-    job_copy = copyJob(job)
-    print("execute job copy")
-    job_copy <- execute(job_copy)
-    status <- waitForCompletion(job_copy)
-    print(paste("Job copy finished with status ", status, sep=""))
-    solution.json <- getAttachment(job_copy, "solution.json")
-    writeBin(solution.json, "solution2.json")
-    
-    return(job_copy)
+    job_copy <- None
+    tryCatch({
+        client <- job$client
+      
+        # copy job
+        job_copy = copyJob(job)
+        print("execute job copy")
+        job_copy <- execute(job_copy)
+        status <- waitForCompletion(job_copy)
+        print(paste("Job copy finished with status ", status, sep=""))
+        solution <- getAttachment(job_copy, "solution.json")
+        write(solution, toJSON("solution2.json"))
+    }, finally = {
+        return(job_copy)
+    }) 
 }
 
 test_that("copy job and recreate work", {

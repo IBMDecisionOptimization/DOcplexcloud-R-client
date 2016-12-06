@@ -8,8 +8,6 @@ source('credentials.R')
 
 
 test_that("basic REST api works", {
-    if (is.null(baseUrl) || baseUrl == "" || is.null(apiKey) || apiKey == "")
-        skip("No URL")
     job <- NULL
     tryCatch({
         client <- TestClient()
@@ -24,8 +22,8 @@ test_that("basic REST api works", {
         status <- waitForCompletion(job)
         print(paste("Job finished with status ", status, sep=""))
 
-        solution.json = getAttachment(job, "solution.json")
-        writeBin(solution.json, "solution.json")
+        solution = getAttachment(job, "solution.json")
+        write(solution, toJSON("solution.json"))
         info <- getInfo(job)
         for(a in info$attachments) {
             print(paste("attachment ", a$name, sep=""))

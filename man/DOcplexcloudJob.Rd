@@ -30,5 +30,4 @@ job <- submitJob(client, addAttachment(file="model.lp"))
 status <- waitForCompletion(job)
 }
 }
-\keyword{internal}
 

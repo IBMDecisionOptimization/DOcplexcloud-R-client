@@ -1,4 +1,4 @@
-#' Creates a new attachment.
+#' The base class for attachments.
 #'
 #' @param name The name of the attachment. If a \code{file} is specified,
 #'   the name can be ommited and the basename of the \code{file} is used.
@@ -8,12 +8,12 @@
 #' @examples
 #' # Creates an attachment which content is the content of this file,
 #' # and which name is "model.lp"
-#' a <- DOcplexcloudAttachment(file = "/home/joe/models/model.lp")
+#' a <- DOcplexcloudAttachment$new(file = "/home/joe/models/model.lp")
 #'
 #' # Creates an attachment which content is the specified file, and
 #' # which name is "model.lp"
-#' a <- DOcplexcloudAttachment(name = "model.lp",
-#'                             file = "/home/joe/models/model_1231.lp")
+#' a <- DOcplexcloudAttachment$new(name = "model.lp",
+#'                                 file = "/home/joe/models/model_1231.lp")
 #'
 #' # create an attachment which data is stored in memory
 #' model <- "Minimize
@@ -23,23 +23,29 @@
 #'             3 <= x <= 17
 #'             2 <= y
 #'           End"
-#' a <- DOcplexcloudAttachment(name="model.lp",
-#'                             data=charToRaw(model))
+#' a <- DOcplexcloudAttachment$new(name="model.lp",
+#'                                 data=charToRaw(model))
 #' @keywords internal
 #' @export
-DOcplexcloudAttachment <- function(name = NULL, file = NULL, data = NULL) {
-    if (is.null(file) && is.null(name)) {
-        stop("Cannot attach data without attachment name.")
-    }
-    if (is.null(name)) {
-        name = basename(file)
-    }
-    me <- list(name = name,
-               file = file,
-               data = data)
-    class(me) <- append(class(me), "DOcplexcloudAttachment")
-    return(me)
-}
+DOcplexcloudAttachment <- setRefClass(
+    "DOcplexcloudAttachment", 
+    fields = c("name", "file", "data"),
+    methods = list (
+        getName = function() {
+            "Returns a name for the attachment.
+            
+            The name of the attachment is the \\code{name} field of the attachement.
+            If that field is empty or NULL, then the name is the basename of
+            \\code{attachment$file}
+            "
+            n <- name
+            if (is.null(name) || name == "") {
+                n <- basename(file)
+            }
+            return(n)
+        }
+    )
+)
 
 #' Creates a new attachment.
 #'
@@ -47,7 +53,8 @@ DOcplexcloudAttachment <- function(name = NULL, file = NULL, data = NULL) {
 #'   the name can be ommited and the basename of the \code{file} is used.
 #' @param file The name of the file containing the data for the attachment.
 #' @param data The raw data for the attachment.
-#' @return an instance of DOcplexcloudAttachment with the specified attachment data.
+#' @return An attachment object suitable to use with methods of
+#'    DOcplexcloudClient and DOcplexcloudJob
 #'
 #' @examples
 #' # Creates an attachment which content is the content of this file,
@@ -75,27 +82,5 @@ addAttachment <- function(name = NULL, file = NULL, data = NULL) {
 }
 
 
-#' Returns a name for the attachment.
-#'
-#' The name of the attachment is the \code{name} field of the attachement.
-#' If that field is empty or NULL, then the name is the basename of
-#' \code{attachment$file}
-#'
-#' @param attachment The attachment
-#' @return A name for the attachment.
-#' @export
-getAttachmentName <- function(attachment) {
-    UseMethod("getAttachmentName", attachment)
-}
-
-#' @export
-getAttachmentName.DOcplexcloudAttachment=function(attachment)
-{
-    name <- attachment$name
-    if (is.null(attachment$name) || attachment$name == "") {
-        name <- basename(attachment$file)
-    }
-    return(name)
-}
 
 

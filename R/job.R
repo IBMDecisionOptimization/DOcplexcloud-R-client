@@ -15,7 +15,6 @@
 #' job <- submitJob(client, addAttachment(file="model.lp"))
 #' status <- waitForCompletion(job)
 #' }
-#' @keywords internal
 #' @export
 DOcplexcloudJob <- function(client = NULL, joburl = NULL, attachments = list()) {
     me <- list(client = client,
@@ -160,7 +159,7 @@ uploadAttachment <- function(job, attachment=NULL, ...) {
 #' @export
 uploadAttachment.DOcplexcloudJob=function(job, attachment=NULL, ...)
 {
-    name <- getAttachmentName(attachment)
+    name <- attachment$getName()
     att_url <- paste(job$joburl, "/attachments/", name, "/blob", sep="")
     if (!is.null(attachment$file) && !(attachment$file == "")) {
         att_data <- charToRaw(readChar(attachment$file, file.info(attachment$file)$size))
@@ -184,7 +183,7 @@ uploadAttachment.DOcplexcloudJob=function(job, attachment=NULL, ...)
     # update attachment list.
     index <- -1
     for (i in 1:length(job$attachments)) {
-        iname <- getAttachmentName(job$attachments[[i]])
+        iname <- job$attachments[[i]]$getName()
         if (iname == name) {
             index <- i
         }

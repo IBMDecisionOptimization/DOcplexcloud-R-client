@@ -15,7 +15,8 @@ the name can be ommited and the basename of the \code{file} is used.}
 \item{data}{The raw data for the attachment.}
 }
 \value{
-an instance of DOcplexcloudAttachment with the specified attachment data.
+An attachment object suitable to use with methods of
+   DOcplexcloudClient and DOcplexcloudJob
 }
 \description{
 Creates a new attachment.
