@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# mainly to ignore files resulting from build
+*.tar.gz
+*.Rcheck/
+
+# ignore solutions in demo or tests
+**/solution*.json

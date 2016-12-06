@@ -1,0 +1,6 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^make.sh$
+^.*.tar.gz$
+^demo/solution\.json$
+^tests/testthat/solution\.json$
