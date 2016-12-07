@@ -12,6 +12,12 @@ This library requires R 3.2 or later.
 
 ## Install the library
 
+### from the downloaded archive
+
+Download <code>docplexcloud_0.1.0.tar.gz</code>. Then:
+
+    install.packages("docplexcloud_0.1.0.tar.gz", repos = NULL, type = "source")
+
 ### from CRAN
 
     install.package("docplexcloud")
@@ -43,9 +49,6 @@ application using IBM Decision Optimization on Cloud solve service.
     [Get API key & base URL](<http://developer.ibm.com/docloud/docs/api-key) 
     page to generate the key once you've registered. This page also contains 
     the base URL you must use for DOcplexcloud.
- 
-## Dependencies
-
 
 ## License
 
