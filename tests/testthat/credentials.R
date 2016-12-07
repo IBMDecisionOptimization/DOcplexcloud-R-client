@@ -4,5 +4,5 @@ TestClient <- function() {
     apiKey <- Sys.getenv("DOCPLEXCLOUD_KEY")
     if (is.null(baseUrl) || baseUrl == "" || is.null(apiKey) || apiKey == "")
         skip("No URL")
-    return(DOcplexcloudClient(verbose = TRUE))
+    return(DOcplexcloudClient$new(verbose = TRUE))
 }

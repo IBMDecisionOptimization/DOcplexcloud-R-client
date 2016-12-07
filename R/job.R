@@ -41,8 +41,7 @@ abort.DOcplexcloudJob=function(job, ...)
     # If job has never been created before: just create it
     url <- paste(job$joburl, "/execute", sep="")
 
-    response = makeRequest(job$client,
-                           "DELETE",
+    response = job$client$makeRequest("DELETE",
                            url = url,
                            fail_message = "abort job",
                            content_type_json(),
@@ -172,8 +171,7 @@ uploadAttachment.DOcplexcloudJob=function(job, attachment=NULL, ...)
     if (job$client$verbose) {
         print(paste("Uploading attachment", att_url))
     }
-    response <- makeRequest(job$client, 
-                            "PUT",
+    response <- job$client$makeRequest("PUT",
                              url = att_url,
                              fail_message = "upload attachment to url",
                              content_type("application/octet-stream"),
@@ -211,8 +209,7 @@ getInfo <- function(job, ...) {
 #' @export
 getInfo.DOcplexcloudJob=function(job, ...)
           {
-            response <- makeRequest(job$client,
-                                    "GET",
+            response <- job$client$makeRequest("GET",
                                     url = job$joburl,
                                     fail_message = "get info",
                                     content_type_json(),
@@ -244,15 +241,14 @@ create.DOcplexcloudJob=function(job, ...)
         # The url to create jobs
         url <- paste(job$client$url, "/jobs", sep="")
 
-        att_names <- Map(function(a) ifelse(is.null(a$name) || a$name == "", a$file, a$name),
+        att_names <- Map(function(a) a$getName(),
                          job$attachments)
 
         if (job$client$verbose) {
             print(paste("attachment list: ", att_names))
         }
         body <- list(attachments=att_names)
-        response <- makeRequest(job$client,
-                                "POST",
+        response <- job$client$makeRequest("POST",
                                 url = url,
                                 fail_message = "create job on url",
                                 content_type_json(),
@@ -307,8 +303,7 @@ copyJob.DOcplexcloudJob=function(job, shallow=FALSE, override_data="", ...)
         print(paste("copying job, url =", url))
     }
     
-    response = makeRequest(job$client,
-                           "POST",
+    response = job$client$makeRequest("POST",
                            url = url,
                            fail_message = "copy job",
                            content_type_json(),
@@ -338,8 +333,7 @@ delete.DOcplexcloudJob=function(job, ...)
           {
                 # If job has never been created before: just create it
                 if (job$joburl != "") {
-                    response = makeRequest(job$client,
-                                           "DELETE",
+                    response = job$client$makeRequest("DELETE",
                                            url = job$joburl,
                                            fail_message = "delete job",
                                            content_type_json(),
@@ -365,8 +359,7 @@ execute.DOcplexcloudJob=function(job, ...)
     # If job has never been created before: just create it
     url = paste(job$joburl, "/execute", sep="")
 
-    response = makeRequest(job$client,
-                           "POST",
+    response = job$client$makeRequest("POST",
                            url = url,
                            fail_message = "execute job",
                            content_type_json(),
@@ -390,8 +383,7 @@ status.DOcplexcloudJob=function(job, ...)
 {
     # If job has never been created before: just create it
     url = paste(job$joburl, "/execute", sep="")
-    response = makeRequest(job$client,
-                           "GET",
+    response = job$client$makeRequest("GET",
                            url = url,
                            fail_message = "get status",
                            content_type_json(),

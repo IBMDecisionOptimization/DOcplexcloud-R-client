@@ -11,14 +11,15 @@ variables.df <- NULL
 test_that("execute on client", {
     variables.df <- NULL
     job <- NULL
+    status <- NULL
     tryCatch({
         client <- TestClient()
-        job <- submitJob(client, addAttachment(file="sample_diet.lp"))
+        job <- client$submitJob(addAttachment(file="sample_diet.lp"))
         status <- waitForCompletion(job)
         print("DONE")
         if (status == "PROCESSED") {
             # This automatically parse the data
-            solution = getAttachment(job, "solution.json")
+            solution = getAttachment(job, "solution_test-docplexcloud.json")
 
             # transform the list to list with named fields
             dc <- lapply(solution$CPLEXSolution$variables, unlist)

@@ -19,9 +19,8 @@ testModelAsString <- function() {
                 3 <= x <= 17\n
                 2 <= y\n
               End\n"
-    job <- submitJob(client,
-                     addAttachment(name="model.lp",
-                                   data=charToRaw(model)))
+    job <- client$submitJob(addAttachment(name="model.lp",
+                                          data=charToRaw(model)))
     status <- waitForCompletion(job)
     print("DONE")
     if (status == "PROCESSED") {

@@ -9,8 +9,8 @@ require('docplexcloud')
 job <- NULL
 tryCatch({
     # uses environment variables DOCPLEXCLOUD_URL and DOCPLEXCLOUD_KEY
-    client <- DOcplexcloudClient(verbose=TRUE)
-    job <- submitJob(client, addAttachment(file="sample_diet.lp"))
+    client <- DOcplexcloudClientR6$new(verbose=TRUE)
+    job <- client$submitJob(addAttachment(file="sample_diet.lp"))
     status <- waitForCompletion(job)
     if (status == "PROCESSED") {
         # Download attachment

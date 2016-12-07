@@ -1,3 +1,5 @@
+library(R6)
+
 #' The base class for attachments.
 #'
 #' @param name The name of the attachment. If a \code{file} is specified,
@@ -27,10 +29,16 @@
 #'                                 data=charToRaw(model))
 #' @keywords internal
 #' @export
-DOcplexcloudAttachment <- setRefClass(
-    "DOcplexcloudAttachment", 
-    fields = c("name", "file", "data"),
-    methods = list (
+DOcplexcloudAttachment <- R6Class("DOcplexcloudAttachment",
+    public = list(
+        name = NULL,
+        file = NULL,
+        data = NULL,
+        initialize = function(name=NULL, file=NULL, data=NULL) {
+            self$name <- name
+            self$file <- file
+            self$data <- data
+        },
         getName = function() {
             "Returns a name for the attachment.
             
@@ -38,13 +46,13 @@ DOcplexcloudAttachment <- setRefClass(
             If that field is empty or NULL, then the name is the basename of
             \\code{attachment$file}
             "
-            n <- name
-            if (is.null(name) || name == "") {
-                n <- basename(file)
+            n <- self$name
+            if (is.null(self$name) || self$name == "") {
+                n <- basename(self$file)
             }
             return(n)
         }
-    )
+    ) 
 )
 
 #' Creates a new attachment.

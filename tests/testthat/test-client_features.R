@@ -29,7 +29,7 @@ test_that("client features work", {
             print(paste("created job", job$joburl))
         }
         # list jobs
-        jlist <- getAllJobs(client)
+        jlist <- client$getAllJobs()
     }, finally = {
         for (job in jobs) {
             job <- delete(job)
