@@ -100,10 +100,10 @@ getLogs.DOcplexcloudJob=function(job, ...)
     response <- RETRY("GET",
                       url = log_url,
                       add_headers( "X-IBM-Client-Id" = job$client$key),
-                      content_type("application/octet-stream"),
+                      content_type("application/text"),
                       ...)
     stop_for_status(response, paste("get logs ", log_url, sep=""))
-    return(content(response))
+    return(rawToChar(content(response)))
 }
 
 

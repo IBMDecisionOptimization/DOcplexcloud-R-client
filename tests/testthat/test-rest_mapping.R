@@ -23,7 +23,7 @@ test_that("basic REST api works", {
         print(paste("Job finished with status ", status, sep=""))
 
         solution = getAttachment(job, "solution.json")
-        write(solution, toJSON("solution.json"))
+        write(toJSON(solution), "solution.json")
         info <- getInfo(job)
         for(a in info$attachments) {
             print(paste("attachment ", a$name, sep=""))

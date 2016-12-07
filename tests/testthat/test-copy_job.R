@@ -3,7 +3,7 @@ require(docplexcloud)
 source('credentials.R')
 
 createJob <- function(client) {
-    job <= None
+    job <- NULL
     tryCatch({
         print("create job")
         job <- DOcplexcloudJob(client=client)
@@ -16,8 +16,8 @@ createJob <- function(client) {
         status <- waitForCompletion(job)
         print(paste("Job finished with status ", status, sep=""))
         
-        solution.json <- getAttachment(job, "solution.json")
-        write(solution, toJSON("solution1.json"))
+        solution <- getAttachment(job, "solution.json")
+        write(toJSON(solution), "solution1.json")
     },
     finally = {
         return(job)
@@ -25,7 +25,7 @@ createJob <- function(client) {
 }
 
 testCopy <- function(job) {
-    job_copy <- None
+    job_copy <- NULL
     tryCatch({
         client <- job$client
       
@@ -36,7 +36,7 @@ testCopy <- function(job) {
         status <- waitForCompletion(job_copy)
         print(paste("Job copy finished with status ", status, sep=""))
         solution <- getAttachment(job_copy, "solution.json")
-        write(solution, toJSON("solution2.json"))
+        write(toJSON(solution), "solution2.json")
     }, finally = {
         return(job_copy)
     }) 

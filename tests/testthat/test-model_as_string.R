@@ -26,18 +26,16 @@ testModelAsString <- function() {
     print("DONE")
     if (status == "PROCESSED") {
         print("downloading and writing solution.json")
-        solution.json = getAttachment(job, "solution.json")
-        writeBin(solution.json, "solution.json")
+        solution = getAttachment(job, "solution.json")
+        write(toJSON(solution), "solution.json")
     } else {
         # maybe an error ?
         print(paste("Job finished with status ", status, sep=""))
     }
     logs <- getLogs(job)
-    print("LOGS")
-    print(rawToChar(logs))
+    cat("LOGS\n")
+    cat(logs)
     info <- getInfo(job)
-    print("INFO")
-    print(info)
     delete(job)
 }
 

@@ -26,7 +26,7 @@ test_that("execute on client", {
             # make a data frame from that
             variables.df <- as.data.frame(do.call("rbind", dc))
             print(variables.df)
-            variables.df[variables.df$name == 'x10']["value"]
+            variables.df[variables.df$name == 'x10',]["value"]
         } else {
             # maybe an error ?
             print(paste("Job finished with status ", status, sep=""))

@@ -78,7 +78,7 @@ DOcplexcloudAttachment <- setRefClass(
 #'                    data=charToRaw(model))
 #' @export
 addAttachment <- function(name = NULL, file = NULL, data = NULL) {
-    return(DOcplexcloudAttachment(name=name, file=file, data=data))
+    return(DOcplexcloudAttachment$new(name=name, file=file, data=data))
 }
 
 

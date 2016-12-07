@@ -3,4 +3,3 @@ library(docplexcloud)
 
 test_check('docplexcloud')
 
-
