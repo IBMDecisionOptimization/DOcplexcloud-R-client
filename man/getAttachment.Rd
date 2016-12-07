@@ -4,17 +4,17 @@
 \alias{getAttachment}
 \title{Downloads the specified attachment for a job.}
 \usage{
-getAttachment(job, name, ...)
+getAttachment(job, name, convert, ...)
 }
 \arguments{
 \item{job}{The job.}
 
 \item{name}{The name of the attachment.}
 
-\item{...}{Extra parameters passed to \code{httr}}
-
 \item{convert}{If TRUE, the method try to convert the attachment to a data
 structure ready for use (example: parse JSON).}
+
+\item{...}{Extra parameters passed to \code{httr}}
 }
 \description{
 Attachments are always returned as raw data, unless

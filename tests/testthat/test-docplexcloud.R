@@ -19,7 +19,7 @@ test_that("execute on client", {
         print("DONE")
         if (status == "PROCESSED") {
             # This automatically parse the data
-            solution = getAttachment(job, "solution_test-docplexcloud.json")
+            solution = getAttachment(job, "solution.json")
 
             # transform the list to list with named fields
             dc <- lapply(solution$CPLEXSolution$variables, unlist)

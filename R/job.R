@@ -30,6 +30,7 @@ DOcplexcloudJob <- function(client = NULL, joburl = NULL, attachments = list()) 
 #'
 #' @param job The job to abort.
 #' @param ... Extra parameters passed to \code{httr}
+#' @import httr
 #' @export
 abort <- function(job, ...) {
     UseMethod("abort", job)
@@ -119,12 +120,12 @@ getLogs.DOcplexcloudJob=function(job, ...)
 #'        structure ready for use (example: parse JSON).
 #' @param ... Extra parameters passed to \code{httr}
 #' @export
-getAttachment <- function(job, name, ...) {
+getAttachment <- function(job, name, convert, ...) {
     UseMethod("getAttachment", job)
 }
 
 #' @export
-getAttachment.DOcplexcloudJob=function(job, name, ...)
+getAttachment.DOcplexcloudJob=function(job, name, convert=TRUE, ...)
 {
     att_url <- paste(job$joburl, "/attachments/", name, "/blob", sep="")
     response <- RETRY("GET",
@@ -133,7 +134,7 @@ getAttachment.DOcplexcloudJob=function(job, name, ...)
                       content_type("application/octet-stream"),
                       ...)
     stop_for_status(response, paste("get attachment ", att_url, sep=""))
-    if (endsWith(tolower(name), ".json")) {
+    if (convert && endsWith(tolower(name), ".json")) {
         return(fromJSON(rawToChar(content(response))))
     } else {
         return(content(response))

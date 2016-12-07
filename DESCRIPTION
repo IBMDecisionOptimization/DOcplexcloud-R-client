@@ -13,6 +13,8 @@ Maintainer: Viu-Long Kong <viulong.kong@fr.ibm.com>
 Depends:
     httr,
     rjson
+Imports:
+    R6
 Suggests:
     testthat
 Description: The IBM Decision Optimization on Cloud (DOcplexcloud) client allows
