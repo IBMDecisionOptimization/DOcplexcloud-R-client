@@ -9,3 +9,6 @@
 
 # ignore solutions in demo or tests
 **/solution*.json
+
+# ignore tests that I write and do not want to publish
+tests/testthat/my_*.R

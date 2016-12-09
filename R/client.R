@@ -1,6 +1,12 @@
 library(R6)
 
 #' The DOcplexcloud client class.
+#' 
+#' The client makes it easier to work with the
+#' solve service by encapsulating connection parameters (connection URL, api key)
+#' and provides support for features of DOcplexcloud solve service not tied to a
+#' particular job, like listing
+#' all jobs for the current user or deleting all jobs.
 #'
 #' @docType class
 #' @format The DOcplexcloud client class.
@@ -15,7 +21,14 @@ library(R6)
 #' @section Methods:
 #' \describe{
 #'   \item{\code{new(url, key, verbose)}}{Initialize a new client.}
-#'   \item{\code{submitJob(...)}}{Submits a job execution.}
+#'   \item{\code{submitJob(..., wait=TRUE)}}{Submits a job execution.
+#' 
+#'       This method creates the job, upoads the attachments, submit an execution
+#'       request, then wait for completion of the job, unless \code{wait} is
+#'       \code{FALSE}.
+#'
+#'       Returns a \code{DOcplexcloudJob}.
+#'   }
 #'   \item{\code{getAllJobs(...)}}{Returns all jobs for the current user.}
 #'   \item{\code{deleteAllJobs(...)}}{Delete all jobs for the current user.}
 #' }
@@ -55,7 +68,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
             self$key <- key
             self$verbose <- verbose
         },
-        submitJob = function(...) {
+        submitJob = function(..., wait = TRUE) {
             "Submits a job for execution."
             dots <- list(...)
             attachments <- Filter(function(d) { inherits(d, "DOcplexcloudAttachment")}, dots)
@@ -64,6 +77,10 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
             job$attachments <- attachments
             job <- create(job)
             job <- execute(job)
+            if (wait) {
+                status = waitForCompletion(job)
+                job$executionStatus <- status
+            }
             return (job)
         },
         makeRequest = function(verb, url, fail_message, ...) {

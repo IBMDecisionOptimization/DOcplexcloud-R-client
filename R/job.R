@@ -1,8 +1,10 @@
-#' Creates a new instance of \code{DOcplexcloudJob}
+#' The job class. This class provides the API to manage operations on jobs.
 #'
-#' @param client The \code{DOcplexcloudClient}.
-#' @param joburl The url of the job.
-#' @param attachments The attachments
+#' @field client The \code{DOcplexcloudClient}.
+#' @field joburl The url of the job.
+#' @field jobid The id of the job.
+#' @field exectutionStatus The execution status if the job has been executed.
+#' @field attachments The attachments
 #' @note You normally don't use this to actually create a job, but
 #'   instead you would create a new job from a \code{DOcplexcloudClient}
 #'
@@ -16,9 +18,13 @@
 #' status <- waitForCompletion(job)
 #' }
 #' @export
-DOcplexcloudJob <- function(client = NULL, joburl = NULL, attachments = list()) {
+DOcplexcloudJob <- function(client = NULL, joburl = NULL, jobid = NULL,
+                            executionStatus = NULL,
+                            attachments = list()) {
     me <- list(client = client,
                joburl = joburl,
+               jobid = jobid,
+               executionStatus = executionStatus,
                attachments = attachments)
     class(me) <- append(class(me), "DOcplexcloudJob")
     return(me)
@@ -171,7 +177,7 @@ uploadAttachment.DOcplexcloudJob=function(job, attachment=NULL, ...)
     }
     if (job$client$verbose) {
         print(paste("Uploading attachment", att_url))
-    }
+    }  
     response <- job$client$makeRequest("PUT",
                              url = att_url,
                              fail_message = "upload attachment to url",
@@ -258,7 +264,9 @@ create.DOcplexcloudJob=function(job, ...)
         stop_for_status(response, paste('could not create job', url))
 
         job$joburl <- headers(response)$location
-
+        e <- strsplit(job$joburl, "/", fixed=TRUE)[[1]]
+        job$jobid <- e[[length(e)]]
+        
         # now upload attachments
         for (a in job$attachments)
         {

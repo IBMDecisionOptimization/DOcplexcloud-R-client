@@ -2,20 +2,27 @@
 % Please edit documentation in R/job.R
 \name{DOcplexcloudJob}
 \alias{DOcplexcloudJob}
-\title{Creates a new instance of \code{DOcplexcloudJob}}
+\title{The job class. This class provides the API to manage operations on jobs.}
 \usage{
-DOcplexcloudJob(client = NULL, joburl = NULL, attachments = list())
-}
-\arguments{
-\item{client}{The \code{DOcplexcloudClient}.}
-
-\item{joburl}{The url of the job.}
-
-\item{attachments}{The attachments}
+DOcplexcloudJob(client = NULL, joburl = NULL, jobid = NULL,
+  executionStatus = NULL, attachments = list())
 }
 \description{
-Creates a new instance of \code{DOcplexcloudJob}
+The job class. This class provides the API to manage operations on jobs.
 }
+\section{Fields}{
+
+\describe{
+\item{\code{client}}{The \code{DOcplexcloudClient}.}
+
+\item{\code{joburl}}{The url of the job.}
+
+\item{\code{jobid}}{The id of the job.}
+
+\item{\code{exectutionStatus}}{The execution status if the job has been executed.}
+
+\item{\code{attachments}}{The attachments}
+}}
 \note{
 You normally don't use this to actually create a job, but
   instead you would create a new job from a \code{DOcplexcloudClient}

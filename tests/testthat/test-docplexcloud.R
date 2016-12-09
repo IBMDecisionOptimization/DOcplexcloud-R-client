@@ -15,9 +15,7 @@ test_that("execute on client", {
     tryCatch({
         client <- TestClient()
         job <- client$submitJob(addAttachment(file="sample_diet.lp"))
-        status <- waitForCompletion(job)
-        print("DONE")
-        if (status == "PROCESSED") {
+        if (job$executionStatus == "PROCESSED") {
             # This automatically parse the data
             solution = getAttachment(job, "solution.json")
 
@@ -37,6 +35,6 @@ test_that("execute on client", {
     }, finally = {
         if (!is.null(job))  delete(job)
     })
-    expect_equal(status, "PROCESSED")
+    expect_equal(job$executionStatus, "PROCESSED")
 })
 

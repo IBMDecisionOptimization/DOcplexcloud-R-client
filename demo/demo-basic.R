@@ -9,10 +9,12 @@ require('docplexcloud')
 job <- NULL
 tryCatch({
     # uses environment variables DOCPLEXCLOUD_URL and DOCPLEXCLOUD_KEY
-    client <- DOcplexcloudClientR6$new(verbose=TRUE)
+    client <- DOcplexcloudClient$new(verbose=TRUE)
+
+    # create job, upload attachment, submit execution
+    # and wait for completion
     job <- client$submitJob(addAttachment(file="sample_diet.lp"))
-    status <- waitForCompletion(job)
-    if (status == "PROCESSED") {
+    if (job$executionStatus == "PROCESSED") {
         # Download attachment
         solution = getAttachment(job, "solution.json")
         # at this point, the json solution has ben parsed
@@ -21,7 +23,7 @@ tryCatch({
         write(toJSON(solution), "solution.json")
     } else {
         # An error occured
-        print(paste("Job finished with status ", status, sep=""))
+        print(paste("Job finished with status ", job$executionStatus, sep=""))
     }
 }, finally = {
     if (!is.null(job))  delete(job)

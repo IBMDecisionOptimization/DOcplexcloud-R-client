@@ -9,7 +9,11 @@
 DOcplexcloudClient
 }
 \description{
-The DOcplexcloud client class.
+The client makes it easier to work with the
+solve service by encapsulating connection parameters (connection URL, api key)
+and provides support for features of DOcplexcloud solve service not tied to a
+particular job, like listing
+all jobs for the current user or deleting all jobs.
 }
 \section{Fields}{
 
@@ -26,7 +30,14 @@ variable DOCPLEXCLOUD_KEY is used}
 
 \describe{
   \item{\code{new(url, key, verbose)}}{Initialize a new client.}
-  \item{\code{submitJob(...)}}{Submits a job execution.}
+  \item{\code{submitJob(..., wait=TRUE)}}{Submits a job execution.
+
+      This method creates the job, upoads the attachments, submit an execution
+      request, then wait for completion of the job, unless \code{wait} is
+      \code{FALSE}.
+
+      Returns a \code{DOcplexcloudJob}.
+  }
   \item{\code{getAllJobs(...)}}{Returns all jobs for the current user.}
   \item{\code{deleteAllJobs(...)}}{Delete all jobs for the current user.}
 }
