@@ -47,21 +47,128 @@ getJobUrl <- function(job_or_url) {
 #'       request, then wait for completion of the job, unless \code{wait} is
 #'       \code{FALSE}.
 #'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'
 #'       Returns a \code{DOcplexcloudJob}.
 #'   }
-#'   \item{\code{getAllJobs(...)}}{Returns all jobs for the current user.}
-#'   \item{\code{deleteAllJobs(...)}}{Delete all jobs for the current user.}
+#'   \item{\code{getAllJobs(...)}}{Returns all jobs for the current user.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'    }
+#'   \item{\code{deleteAllJobs(...)}}{Delete all jobs for the current user.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'   }
 #'   \item{\code{waitForCompletion(job, waittime=Inf, ...)}}{
 #'       Wait for the specified \code{job} to complete.
 #'
-#'       \code{job} can be either a \code{DOcplexcloudJob} or a job URL.
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
 #'
-#'       \code{waittime} The maximum time to wait. This default to \code{Inf}
-#'       if not specified.
+#'       \code{waittime} The maximum time to wait, in seconds. This default to
+#'       \code{Inf} if not specified.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'
+#'       Upon time out, the last known execution status of the job is returned. 
 #'
 #'       Returns the job execution status, which can be: \code{CREATED},
 #'       \code{NOT_STARTED}, \code{RUNNING}, \code{INTERRUPTING},
 #'       \code{INTERRUPTED}, \code{FAILED}, \code{PROCESSED}
+#'   }
+#'   \item{\code{abortJob(job, ...)}}{Aborts the specified job.
+#'
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'   }
+#'   \item{\code{deleteJob(job, ...)}}{Deletes the specified job.
+#'
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'   }
+#'   \item{\code{executeJob(job, ...)}}{Submits an execution request for a job.
+#'
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'   }
+#'   \item{\code{getJobStatus(job, ...)}}{Returns the execution status of a job.
+#'
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'   }
+#'   \item{\code{getJobLogs(job, ...)}}{Download the logs for the job.
+#'
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'
+#'       Returns a character string containing the job logs.
+#'   }
+#'   \item{\code{createJob(attachments, ...)}}{Creates a new job. The specified list
+#'       of attachments is uploaded.
+#'
+#'       \code{attachments} A list of attachments.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'
+#'       Returns The job URL.
+#'   }
+#'   \item{\code{uploadAttachment(job, attachment, ...)}}{
+#'       Uploads the specified attachment for a job.
+#'
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{attachment} A \code{DOcplexcloudAttachment} attachment
+#'       specification. See \code{\link{addAttachment}}.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'   }
+#'   \item{\code{getAttachment(job, name, convert=TRUE, ...)}}{
+#'       Downloads the specified attachment.
+#'
+#'       Attachments are always returned as raw data, unless
+#'       the attachment ends with ".json". In that case, the
+#'       json is downloaded, parsed and converted from JSON,
+#'       unless \code{convert} is false
+#'
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{name} The name of the attachement.
+#'
+#'       \code{convert} If TRUE, the method try to convert the attachment to a
+#'       data structure ready for use (example: parse JSON).
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'   }
+#'   \item{\code{getJobInfo(job, ...)}}{Returns job info for the specified job.
+#'
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'   }
+#'   \item{\code{copyJob(job, shallow=FALSE, overide_data="", ...)}}{
+#'       Creates a new job by copying an existing job.
+#'
+#'       The existing job must not be running or waiting for execution. All creation
+#'       data are copied over to the new job. By default, the input attachments and
+#'       their contents are copied in the new job. If a shallow copy is requested the
+#'       new attachment will point to the existing job, and if it is deleted accessing
+#'       the attachment wil raise an exception. Output attachments are not copied.
+#'       Optionally, a job creation data can be passed to override the parameters and
+#'       declare additional or replacement input attachments.
+#' 
+#'       \code{job} The \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{shallow} Indicates if the copy is shallow.
+#'
+#'       \code{override_data} Data to override as a JSON formatted string.
+#'
+#'       \code{...} Extra parameters passed to \code{httr}
+#'
+#'       Returns The job URL.
 #'   }
 #' }
 #'
@@ -135,9 +242,9 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                                    ...)
             return(response)
         },
-        abortJob = function(joburl, ...) {
+        abortJob = function(job, ...) {
             "Abords the specified job"
-            url <- paste(getJobUrl(joburl), "/execute", sep="")
+            url <- paste(getJobUrl(job), "/execute", sep="")
             response = self$makeRequest("DELETE",
                                         url = url,
                                         fail_message = "abort job",
@@ -145,18 +252,18 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                                         ...)
             return(response)
         },
-        deleteJob = function(joburl, ...) {
+        deleteJob = function(job, ...) {
             "Deletes the specified job"
             response = self$makeRequest("DELETE",
-                                        url = getJobUrl(joburl),
+                                        url = getJobUrl(job),
                                         fail_message = "delete job",
                                         content_type_json(),
                                         ...)
             return(response)
         },
-        executeJob = function(joburl, ...) {
+        executeJob = function(job, ...) {
             "Submits an execute request on a job"
-            url = paste(getJobUrl(joburl), "/execute", sep="")
+            url = paste(getJobUrl(job), "/execute", sep="")
 
             response = self$makeRequest("POST",
                                         url = url,
@@ -165,8 +272,8 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                                         ...)
             return(response)
         },
-        getJobStatus = function(joburl, ...) {
-            url = paste(getJobUrl(joburl), "/execute", sep="")
+        getJobStatus = function(job, ...) {
+            url = paste(getJobUrl(job), "/execute", sep="")
             response = self$makeRequest("GET",
                                         url = url,
                                         fail_message = "get status",
@@ -174,9 +281,9 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                                         ...)
             return(content(response)$executionStatus)
         },
-        getJobLogs = function(joburl, ...) {
+        getJobLogs = function(job, ...) {
             "Download the logs for a job"
-            log_url <- paste(getJobUrl(joburl), "/log/blob", sep="")
+            log_url <- paste(getJobUrl(job), "/log/blob", sep="")
             response <- self$makeRequest("GET",
                                          url = log_url,
                                          fail_message = "get logs",
@@ -233,9 +340,9 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
             }
             return(joburl)
         },
-        uploadAttachment = function(joburl, attachment, ...) {
+        uploadAttachment = function(job, attachment, ...) {
             name <- attachment$getName()
-            att_url <- paste(getJobUrl(joburl), "/attachments/", name, "/blob", sep="")
+            att_url <- paste(getJobUrl(job), "/attachments/", name, "/blob", sep="")
             if (!is.null(attachment$file) && !(attachment$file == "")) {
                 att_data <- charToRaw(readChar(attachment$file, file.info(attachment$file)$size))
             } else {
@@ -255,8 +362,8 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                                      body=att_data)
             return(response)
         },
-        getAttachment = function(joburl, name, convert=TRUE, ...) {
-            att_url <- paste(getJobUrl(joburl), "/attachments/", name, "/blob", sep="")
+        getAttachment = function(job, name, convert=TRUE, ...) {
+            att_url <- paste(getJobUrl(job), "/attachments/", name, "/blob", sep="")
             response <- self$makeRequest("GET",
                                   url = att_url,
                                   fail_message = "get attachment",
@@ -276,12 +383,12 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                                          ...)
             return(content(response))
         },
-        copyJob = function(joburl, shallow=FALSE, override_data="", ...) {
+        copyJob = function(job, shallow=FALSE, override_data="", ...) {
             shallow_value = ifelse(shallow, "true", "false")
             shallow_option = ifelse(shallow, paste("?shallow=", shallow_value, sep=""),
                                     "")
             
-            url <- paste(getJobUrl(joburl), "/copy", shallow_option, sep="")
+            url <- paste(getJobUrl(job), "/copy", shallow_option, sep="")
 
             if (self$verbose) {
                 print(paste("copying job, url =", url))
