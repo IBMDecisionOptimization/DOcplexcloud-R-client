@@ -15,7 +15,7 @@ test_that("basic REST api works", {
     status <- NULL
     tryCatch({
         print("create job")
-        joburl <- client$createJob(attachments=c(addAttachment(file="sample_nurse.lp")))
+        joburl <- client$createJob(addAttachment(file="sample_nurse.lp"))
 
         print("execute job")
         response <- client$executeJob(joburl)

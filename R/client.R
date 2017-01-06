@@ -107,12 +107,15 @@ getJobUrl <- function(job_or_url) {
 #'
 #'       Returns a character string containing the job logs.
 #'   }
-#'   \item{\code{createJob(attachments, ...)}}{Creates a new job. The specified list
+#'   \item{\code{createJob(attachments=NULL, ...)}}{Creates a new job. The specified list
 #'       of attachments is uploaded.
 #'
 #'       \code{attachments} A list of attachments.
 #'
-#'       \code{...} Extra parameters passed to \code{httr}
+#'       \code{...} Any extra arguments of type \code{DOcplexcloudAttachment}
+#'       (for instance, created with \code{link{addAttachment}}) are combined
+#'       with \code{attachments}. Any other extra parameters are passed to
+#'       \code{httr}
 #'
 #'       Returns The job URL.
 #'   }
@@ -313,11 +316,19 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         },
         #' Creates a job.
         #'
-        createJob = function(attachments,...) {
+        createJob = function(attachments=NULL,...) {
             "Creates a job"
             if(self$verbose) {
                 cat("Creating job\n")
             }
+            # get attachments from ...
+            dots <- list(...)
+            attachments_from_dots <- Filter(function(d) { inherits(d, "DOcplexcloudAttachment")}, dots)
+            if(is.null(attachments)) {
+                attachments <- list()
+            }
+            attachments <- c(attachments, attachments_from_dots)
+            # do the requests
             url <- paste(self$url, "/jobs", sep="")
             att_names <- Map(function(a) a$getName(),
                              attachments)
