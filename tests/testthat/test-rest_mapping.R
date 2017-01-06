@@ -8,6 +8,8 @@ source('credentials.R')
 
 
 test_that("basic REST api works", {
+    print("-------------------------- test-rest mapping.R")
+
     joburl <- NULL
     client <- TestClient()
     status <- NULL

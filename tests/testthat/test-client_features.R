@@ -12,6 +12,8 @@ testClientFeatures <- function() {
 }
 
 test_that("client features work", {
+    print("-------------------------- test-client features.R")
+
     jobs <- list()
     tryCatch({
         client <- TestClient()

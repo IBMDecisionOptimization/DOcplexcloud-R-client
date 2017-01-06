@@ -4,7 +4,7 @@ library(R6)
 #'
 #' @keywords internal
 getJobUrl <- function(job_or_url) {
-    if (inherits(d, "DOcplexcloudJob")) {
+    if (inherits(job_or_url, "DOcplexcloudJob")) {
         return(job_or_url$joburl)
     } else {
         return(job_or_url)
@@ -116,7 +116,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         },
         abortJob = function(joburl, ...) {
             "Abords the specified job"
-            url <- paste(joburl, "/execute", sep="")
+            url <- paste(getJobUrl(joburl), "/execute", sep="")
             response = self$makeRequest("DELETE",
                                         url = url,
                                         fail_message = "abort job",
@@ -127,7 +127,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         deleteJob = function(joburl, ...) {
             "Deletes the specified job"
             response = self$makeRequest("DELETE",
-                                        url = joburl,
+                                        url = getJobUrl(joburl),
                                         fail_message = "delete job",
                                         content_type_json(),
                                         ...)
@@ -135,7 +135,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         },
         executeJob = function(joburl, ...) {
             "Submits an execute request on a job"
-            url = paste(joburl, "/execute", sep="")
+            url = paste(getJobUrl(joburl), "/execute", sep="")
 
             response = self$makeRequest("POST",
                                         url = url,
@@ -145,7 +145,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
             return(response)
         },
         getJobStatus = function(joburl, ...) {
-            url = paste(joburl, "/execute", sep="")
+            url = paste(getJobUrl(joburl), "/execute", sep="")
             response = self$makeRequest("GET",
                                         url = url,
                                         fail_message = "get status",
@@ -155,7 +155,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         },
         getJobLogs = function(joburl, ...) {
             "Download the logs for a job"
-            log_url <- paste(joburl, "/log/blob", sep="")
+            log_url <- paste(getJobUrl(joburl), "/log/blob", sep="")
             response <- self$makeRequest("GET",
                                          url = log_url,
                                          fail_message = "get logs",
@@ -163,14 +163,15 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                                          ...)
             return(rawToChar(content(response)))
         },
-        waitForCompletion = function(joburl, waittime=Inf, ...) {
+        waitForCompletion = function(job, waittime=Inf, ...) {
             if(self$verbose) {
                 cat("Waiting for completion\n")
             }
             elapsed <- 0
             sleep_duration <- 2
+            url = getJobUrl(job)
             repeat {
-                st <- self$getJobStatus(joburl)
+                st <- self$getJobStatus(url)
                 if (st == "PROCESSED" || st == "FAILED" || st == "INTERRUPTED") {
                     return (st)
                 }
@@ -211,7 +212,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         },
         uploadAttachment = function(joburl, attachment, ...) {
             name <- attachment$getName()
-            att_url <- paste(joburl, "/attachments/", name, "/blob", sep="")
+            att_url <- paste(getJobUrl(joburl), "/attachments/", name, "/blob", sep="")
             if (!is.null(attachment$file) && !(attachment$file == "")) {
                 att_data <- charToRaw(readChar(attachment$file, file.info(attachment$file)$size))
             } else {
@@ -232,7 +233,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
             return(response)
         },
         getAttachment = function(joburl, name, convert=TRUE, ...) {
-            att_url <- paste(joburl, "/attachments/", name, "/blob", sep="")
+            att_url <- paste(getJobUrl(joburl), "/attachments/", name, "/blob", sep="")
             response <- self$makeRequest("GET",
                                   url = att_url,
                                   fail_message = "get attachment",
@@ -244,9 +245,9 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                 return(content(response))
             }
         },
-        getJobInfo = function(joburl, ...) {
+        getJobInfo = function(job, ...) {
             response <- self$makeRequest("GET",
-                                         url = joburl,
+                                         url = getJobUrl(job),
                                          fail_message = "get info",
                                          content_type_json(),
                                          ...)
@@ -257,7 +258,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
             shallow_option = ifelse(shallow, paste("?shallow=", shallow_value, sep=""),
                                     "")
             
-            url <- paste(joburl, "/copy", shallow_option, sep="")
+            url <- paste(getJobUrl(joburl), "/copy", shallow_option, sep="")
 
             if (self$verbose) {
                 print(paste("copying job, url =", url))

@@ -17,7 +17,7 @@ tryCatch({
     job <- client$submitJob(addAttachment(file="sample_diet.lp"))
     if (job$executionStatus == "PROCESSED") {
         # Download attachment
-        solution = client$getAttachment(job$joburl, "solution.json")
+        solution = client$getAttachment(job, "solution.json")
         # at this point, the json solution has ben parsed
         # and can be accessed using solution$CPLEXSolution
         # we can write it for future use or whatever
@@ -27,5 +27,5 @@ tryCatch({
         cat("Job finished with status", job$executionStatus)
     }
 }, finally = {
-    if (!is.null(job))  client$deleteJob(job$joburl)
+    if (!is.null(job))  client$deleteJob(job)
 })
