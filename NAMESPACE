@@ -3,6 +3,7 @@
 export(DOcplexcloudAttachment)
 export(DOcplexcloudClient)
 export(DOcplexcloudJob)
-export(DOcplexcloudJobResponse)
 export(addAttachment)
+import(httr)
+import(rjson)
 importFrom(R6,R6Class)

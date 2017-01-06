@@ -6,17 +6,18 @@
 #
 require('docplexcloud')
 
-response <- NULL
+job <- NULL
 tryCatch({
     # uses environment variables DOCPLEXCLOUD_URL and DOCPLEXCLOUD_KEY
+    # for \code{url} and \code{key} parameters
     client <- DOcplexcloudClient$new(verbose=TRUE)
 
     # create job, upload attachment, submit execution
     # and wait for completion
-    response <- client$submitJob(addAttachment(file="sample_diet.lp"))
-    if (response$executionStatus == "PROCESSED") {
+    job <- client$submitJob(addAttachment(file="sample_diet.lp"))
+    if (job$executionStatus == "PROCESSED") {
         # Download attachment
-        solution = client$getAttachment(response$joburl, "solution.json")
+        solution = client$getAttachment(job$joburl, "solution.json")
         # at this point, the json solution has ben parsed
         # and can be accessed using solution$CPLEXSolution
         # we can write it for future use or whatever
@@ -26,5 +27,5 @@ tryCatch({
         cat("Job finished with status", job$executionStatus)
     }
 }, finally = {
-    if (!is.null(response))  client$deleteJob(jobResponse$joburl)
+    if (!is.null(job))  client$deleteJob(job$joburl)
 })

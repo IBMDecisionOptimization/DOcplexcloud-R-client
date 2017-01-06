@@ -1,49 +1,31 @@
 library(R6)
 
-#' The job response class. This class is returned by client methods, storing
-#' job information.
+#' The job class. This class is returned by client methods like 
+#' \code{DOcplexcloudClient.submitJob()} and is used to store information for jobs
+#' created and executed on DOcplexcloud.
 #' 
-#' @export
-DOcplexcloudJobResponse <- R6Class("DOcplexcloudJobResponse",
-    public = list (
-        joburl = NULL,
-        executionStatus = NULL,
-        initialize = function() {
-            self$joburl <- NULL
-            self$executionStatus <- NULL
-        }
-    )
-)
-
-#' The job class. This class provides the API to manage operations on jobs.
-#'
-#' @field client The \code{DOcplexcloudClient}.
 #' @field joburl The url of the job.
 #' @field jobid The id of the job.
 #' @field exectutionStatus The execution status if the job has been executed.
-#' @field attachments The attachments
-#' @note You normally don't use this to actually create a job, but
-#'   instead you would create a new job from a \code{DOcplexcloudClient}
-#'
 #' @examples
 #' \dontrun{
 #' client <- DOcplexcloudClient(url='Your DOcplexcloud base URL',
 #'                              key='Your DOcplexcloud api key')
 #'
-#' # create job
-#' job <- submitJob(client, addAttachment(file="model.lp"))
-#' status <- waitForCompletion(job)
+#' # create job and wait for completion
+#' job <- client$submitJob(attachments=c(addAttachment(file="model.lp")))
+#' status <- job$executionStatus
 #' }
 #' @export
-DOcplexcloudJob <- function(client = NULL, joburl = NULL, jobid = NULL,
-                            executionStatus = NULL,
-                            attachments = list()) {
-    me <- list(client = client,
-               joburl = joburl,
-               jobid = jobid,
-               executionStatus = executionStatus,
-               attachments = attachments)
-    class(me) <- append(class(me), "DOcplexcloudJob")
-    return(me)
-}
-
+DOcplexcloudJob <- R6Class("DOcplexcloudJob",
+    public = list (
+        joburl = NULL,
+        jobid = NULL,
+        executionStatus = NULL,
+        initialize = function() {
+            self$joburl <- NULL
+            self$jobid <- NULL
+            self$executionStatus <- NULL
+        }
+    )
+)

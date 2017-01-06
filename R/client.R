@@ -1,5 +1,16 @@
 library(R6)
 
+#' Returns the joburl if a DOcplexcloudJob is passed. Otherwise return the arg.
+#'
+#' @keywords internal
+getJobUrl <- function(job_or_url) {
+    if (inherits(d, "DOcplexcloudJob")) {
+        return(job_or_url$joburl)
+    } else {
+        return(job_or_url)
+    }
+}
+
 #' The DOcplexcloud client class.
 #' 
 #' The client makes it easier to work with the
@@ -17,6 +28,8 @@ library(R6)
 #'      variable DOCPLEXCLOUD_KEY is used
 #' @field verbose If TRUE, sets the verbose mode.
 #' @export
+#' @import httr
+#' @import rjson
 #'
 #' @section Methods:
 #' \describe{
@@ -268,17 +281,17 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
             dots <- list(...)
             attachments <- Filter(function(d) { inherits(d, "DOcplexcloudAttachment")}, dots)
 
-            jobResponse <- DOcplexcloudJobResponse$new()
-            jobResponse$joburl <- self$createJob(attachments=attachments)
-            self$executeJob(jobResponse$joburl)
+            job <- DOcplexcloudJob$new()
+            job$joburl <- self$createJob(attachments=attachments)
+            response <- self$executeJob(job$joburl)
             if (wait) {
-                status <- self$waitForCompletion(jobResponse$joburl)
-                jobResponse$executionStatus <- status
+                status <- self$waitForCompletion(job$joburl)
+                job$executionStatus <- status
                 if (self$verbose) {
-                    cat("execution status =", jobResponse$executionStatus, "\n")
+                    cat("execution status =", job$executionStatus, "\n")
                 }
             }
-            return (jobResponse)
+            return (job)
         }
     )
 )

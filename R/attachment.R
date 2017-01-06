@@ -2,31 +2,11 @@ library(R6)
 
 #' The base class for attachments.
 #'
-#' @param name The name of the attachment. If a \code{file} is specified,
+#' @field name The name of the attachment. If a \code{file} is specified,
 #'   the name can be ommited and the basename of the \code{file} is used.
-#' @param file The name of the file containing the data for the attachment.
-#' @param data The raw data for the attachment.
+#' @field file The name of the file containing the data for the attachment.
+#' @field data The raw data for the attachment.
 #'
-#' @examples
-#' # Creates an attachment which content is the content of this file,
-#' # and which name is "model.lp"
-#' a <- DOcplexcloudAttachment$new(file = "/home/joe/models/model.lp")
-#'
-#' # Creates an attachment which content is the specified file, and
-#' # which name is "model.lp"
-#' a <- DOcplexcloudAttachment$new(name = "model.lp",
-#'                                 file = "/home/joe/models/model_1231.lp")
-#'
-#' # create an attachment which data is stored in memory
-#' model <- "Minimize
-#'             obj: x + y
-#'           Subject To
-#'           Bounds
-#'             3 <= x <= 17
-#'             2 <= y
-#'           End"
-#' a <- DOcplexcloudAttachment$new(name="model.lp",
-#'                                 data=charToRaw(model))
 #' @keywords internal
 #' @export
 DOcplexcloudAttachment <- R6Class("DOcplexcloudAttachment",
