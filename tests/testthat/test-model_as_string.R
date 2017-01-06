@@ -19,23 +19,25 @@ testModelAsString <- function() {
                 3 <= x <= 17\n
                 2 <= y\n
               End\n"
-    job <- client$submitJob(addAttachment(name="model.lp",
-                                          data=charToRaw(model)))
-    status <- waitForCompletion(job)
+    response <- client$submitJob(addAttachment(name="model.lp",
+                                             data=charToRaw(model)),
+                                 wait = FALSE)
+    joburl <- response$joburl                                         
+    status <- client$waitForCompletion(joburl)
     print("DONE")
     if (status == "PROCESSED") {
         print("downloading and writing solution.json")
-        solution = getAttachment(job, "solution.json")
+        solution = client$getAttachment(joburl, "solution.json")
         write(toJSON(solution), "solution.json")
     } else {
         # maybe an error ?
         print(paste("Job finished with status ", status, sep=""))
     }
-    logs <- getLogs(job)
+    logs <- client$getJobLogs(joburl)
     cat("LOGS\n")
     cat(logs)
-    info <- getInfo(job)
-    delete(job)
+    info <- client$getJobInfo(joburl)
+    client$deleteJob(joburl)
 }
 
 test_that("model as string", {

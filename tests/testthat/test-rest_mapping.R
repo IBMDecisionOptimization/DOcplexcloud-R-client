@@ -8,28 +8,26 @@ source('credentials.R')
 
 
 test_that("basic REST api works", {
-    job <- NULL
+    joburl <- NULL
+    client <- TestClient()
+    status <- NULL
     tryCatch({
-        client <- TestClient()
         print("create job")
-        job <- DOcplexcloudJob(client=client)
-        print("set attachment")
-        job <- setAttachment(job, file="sample_nurse.lp")
-        print("submit job")
-        job <- create(job)
+        joburl <- client$createJob(attachments=c(addAttachment(file="sample_nurse.lp")))
+
         print("execute job")
-        job <- execute(job)
-        status <- waitForCompletion(job)
+        response <- client$executeJob(joburl)
+        status <- client$waitForCompletion(joburl)
         print(paste("Job finished with status ", status, sep=""))
 
-        solution = getAttachment(job, "solution.json")
+        solution <- client$getAttachment(joburl, "solution.json")
         write(toJSON(solution), "solution.json")
-        info <- getInfo(job)
+        info <- client$getJobInfo(joburl)
         for(a in info$attachments) {
             print(paste("attachment ", a$name, sep=""))
         }
     }, finally = {
-        delete(job)
+        client$deleteJob(joburl)
     })
     expect_equal(status, "PROCESSED")
  })

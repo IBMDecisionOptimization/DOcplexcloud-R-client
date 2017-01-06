@@ -6,17 +6,13 @@ createJob <- function(client) {
     job <- NULL
     tryCatch({
         print("create job")
-        job <- DOcplexcloudJob(client=client)
-        print("set attachment")
-        job <- setAttachment(job, file="sample_diet.lp")
-        print("submit job")
-        job <- create(job)
+        job <- client$createJob(attachments=c(addAttachment(file="sample_diet.lp")))
         print("execute job")
-        job <- execute(job)
-        status <- waitForCompletion(job)
+        client$executeJob(job)
+        status <- client$waitForCompletion(job)
         print(paste("Job finished with status ", status, sep=""))
         
-        solution <- getAttachment(job, "solution.json")
+        solution <- client$getAttachment(job, "solution.json")
         write(toJSON(solution), "solution1.json")
     },
     finally = {
@@ -24,18 +20,16 @@ createJob <- function(client) {
     })
 }
 
-testCopy <- function(job) {
+testCopy <- function(client, job) {
     job_copy <- NULL
-    tryCatch({
-        client <- job$client
-      
+    tryCatch({      
         # copy job
-        job_copy = copyJob(job)
+        job_copy <- client$copyJob(job)
         print("execute job copy")
-        job_copy <- execute(job_copy)
-        status <- waitForCompletion(job_copy)
+        client$executeJob(job_copy)
+        status <- client$waitForCompletion(job_copy)
         print(paste("Job copy finished with status ", status, sep=""))
-        solution <- getAttachment(job_copy, "solution.json")
+        solution <- client$getAttachment(job_copy, "solution.json")
         write(toJSON(solution), "solution2.json")
     }, finally = {
         return(job_copy)
@@ -45,16 +39,16 @@ testCopy <- function(job) {
 test_that("copy job and recreate work", {
     job <- NULL
     job_copy <- NULL
+    client <- TestClient()
     # let's submit a job and solve it.
     # Theb copy the job, execute it and get solution
     # The two solutions should match. 
     tryCatch({
-        client <- TestClient()
         job <- createJob(client)
-        job_copy <- testCopy(job)
+        job_copy <- testCopy(client, job)
     }, finally = {
-        if (!is.null(job))  delete(job)
-        if (!is.null(job_copy))  delete(job_copy)
+        if (!is.null(job))  client$deleteJob(job)
+        if (!is.null(job_copy))  client$deleteJob(job_copy)
     })
     sol1 <- readChar("solution1.json", file.info("solution1.json")$size)
     sol2 <- readChar("solution2.json", file.info("solution2.json")$size)

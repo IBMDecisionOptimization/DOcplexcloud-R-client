@@ -21,18 +21,17 @@ test_that("client features work", {
         # create some jobs
         jobs <- list()
         for (i in 1:3) {
-            job <- DOcplexcloudJob(client=client)
             name <- paste("job", i, "_", now , ".lp", sep="")
-            job <- setAttachment(job, name=name, file="sample_diet.lp")
-            job <- create(job)
-            jobs[[length(jobs)+1]] <- job
-            print(paste("created job", job$joburl))
+            joburl <- client$createJob(attachments=c(addAttachment(name=name,
+                                                                   file="sample_diet.lp")))
+            jobs[[length(jobs)+1]] <- joburl
+            print(paste("created job", joburl))
         }
         # list jobs
         jlist <- client$getAllJobs()
     }, finally = {
         for (job in jobs) {
-            job <- delete(job)
+            job <- client$deleteJob(job)
         }
     })
     expect_equal(length(jobs), 3)
