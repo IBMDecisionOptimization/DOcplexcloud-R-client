@@ -22,10 +22,8 @@ getJobUrl <- function(job_or_url) {
 #' @docType class
 #' @format The DOcplexcloud client class.
 #' @importFrom R6 R6Class
-#' @field url The DOcplexcloud url. If not specified, the value of environment
-#'      variable DOCPLEXCLOUD_URL is used.
-#' @field key The DOcplexcloud api key. If not specified, the value of environment
-#'      variable DOCPLEXCLOUD_KEY is used
+#' @field url The DOcplexcloud URL.
+#' @field key The DOcplexcloud api key.
 #' @field verbose If TRUE, sets the verbose mode.
 #' @export
 #' @import httr
@@ -33,7 +31,16 @@ getJobUrl <- function(job_or_url) {
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{new(url, key, verbose)}}{Initialize a new client.}
+#'   \item{\code{new(url, key, verbose=FALSE)}}{Initialize a new client with
+#'       the specified \code{url} and \code{key} parameters.
+#'
+#'       If \code{url} is not specified, the value of environment variable
+#'       \code{DOCPLEXCLOUD_URL} is used. If \code{key} is not specified, the
+#'       value of environment variable \code{key} is used.
+#'
+#'       When \code{verbose} is TRUE, extra information is printed when the
+#'       client API is called.
+#'   }
 #'   \item{\code{submitJob(..., wait=TRUE)}}{Submits a job execution.
 #' 
 #'       This method creates the job, upoads the attachments, submit an execution
@@ -44,6 +51,18 @@ getJobUrl <- function(job_or_url) {
 #'   }
 #'   \item{\code{getAllJobs(...)}}{Returns all jobs for the current user.}
 #'   \item{\code{deleteAllJobs(...)}}{Delete all jobs for the current user.}
+#'   \item{\code{waitForCompletion(job, waittime=Inf, ...)}}{
+#'       Wait for the specified \code{job} to complete.
+#'
+#'       \code{job} can be either a \code{DOcplexcloudJob} or a job URL.
+#'
+#'       \code{waittime} The maximum time to wait. This default to \code{Inf}
+#'       if not specified.
+#'
+#'       Returns the job execution status, which can be: \code{CREATED},
+#'       \code{NOT_STARTED}, \code{RUNNING}, \code{INTERRUPTING},
+#'       \code{INTERRUPTED}, \code{FAILED}, \code{PROCESSED}
+#'   }
 #' }
 #'
 #' @examples
@@ -65,6 +84,8 @@ getJobUrl <- function(job_or_url) {
 #'           End"
 #' job <- client$submitJob(addAttachment(name="model.lp",
 #'                                       data=charToRaw(model)))
+#' # download solution
+#' solution = client$getAttachment(job, "solution.json")
 #' }
 DOcplexcloudClient <- R6Class("DOcplexcloudClient",
     public = list(
@@ -183,6 +204,8 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                 }
             }
         },
+        #' Creates a job.
+        #'
         createJob = function(attachments,...) {
             "Creates a job"
             if(self$verbose) {

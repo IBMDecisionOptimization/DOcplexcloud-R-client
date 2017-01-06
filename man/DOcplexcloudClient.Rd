@@ -18,18 +18,25 @@ all jobs for the current user or deleting all jobs.
 \section{Fields}{
 
 \describe{
-\item{\code{url}}{The DOcplexcloud url. If not specified, the value of environment
-variable DOCPLEXCLOUD_URL is used.}
+\item{\code{url}}{The DOcplexcloud URL.}
 
-\item{\code{key}}{The DOcplexcloud api key. If not specified, the value of environment
-variable DOCPLEXCLOUD_KEY is used}
+\item{\code{key}}{The DOcplexcloud api key.}
 
 \item{\code{verbose}}{If TRUE, sets the verbose mode.}
 }}
 \section{Methods}{
 
 \describe{
-  \item{\code{new(url, key, verbose)}}{Initialize a new client.}
+  \item{\code{new(url, key, verbose=FALSE)}}{Initialize a new client with
+      the specified \code{url} and \code{key} parameters.
+
+      If \code{url} is not specified, the value of environment variable
+      \code{DOCPLEXCLOUD_URL} is used. If \code{key} is not specified, the
+      value of environment variable \code{key} is used.
+
+      When \code{verbose} is TRUE, extra information is printed when the
+      client API is called.
+  }
   \item{\code{submitJob(..., wait=TRUE)}}{Submits a job execution.
 
       This method creates the job, upoads the attachments, submit an execution
@@ -40,6 +47,18 @@ variable DOCPLEXCLOUD_KEY is used}
   }
   \item{\code{getAllJobs(...)}}{Returns all jobs for the current user.}
   \item{\code{deleteAllJobs(...)}}{Delete all jobs for the current user.}
+  \item{\code{waitForCompletion(job, waittime=Inf, ...)}}{
+      Wait for the specified \code{job} to complete.
+
+      \code{job} can be either a \code{DOcplexcloudJob} or a job URL.
+
+      \code{waittime} The maximum time to wait. This default to \code{Inf}
+      if not specified.
+
+      Returns the job execution status, which can be: \code{CREATED},
+      \code{NOT_STARTED}, \code{RUNNING}, \code{INTERRUPTING},
+      \code{INTERRUPTED}, \code{FAILED}, \code{PROCESSED}
+  }
 }
 }
 \examples{
@@ -61,7 +80,11 @@ model <- "Minimize
           End"
 job <- client$submitJob(addAttachment(name="model.lp",
                                       data=charToRaw(model)))
+# download solution
+solution = client$getAttachment(job, "solution.json")
 }
+Creates a job.
+
 }
 \keyword{datasets}
 
