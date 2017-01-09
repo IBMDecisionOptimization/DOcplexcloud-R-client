@@ -12,17 +12,7 @@ This library requires R 3.2 or later.
 
 ## Install the library
 
-### from the downloaded archive
-
-Download <code>docplexcloud_0.1.0.tar.gz</code>. Then:
-
-    install.packages("docplexcloud_0.1.0.tar.gz", repos = NULL, type = "source")
-
-### from CRAN
-
-    install.package("docplexcloud")
-
-### from github
+You can install the library from github:
 
     library(devtools)
     install_github("https://github.ibm.com/IBMDecisionOptimization/DOcplexcloud-R-client")
