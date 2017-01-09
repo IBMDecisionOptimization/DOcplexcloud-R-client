@@ -8,7 +8,10 @@ addAttachment(name = NULL, file = NULL, data = NULL)
 }
 \arguments{
 \item{name}{The name of the attachment. If a \code{file} is specified,
-the name can be ommited and the basename of the \code{file} is used.}
+the name can be ommited and the basename of the \code{file} is used.
+If \code{name} is a string pointing to a file, and \code{file} is not
+specified, the content of the file pointed by \code{name} is used as
+attachment data.}
 
 \item{file}{The name of the file containing the data for the attachment.}
 
@@ -23,8 +26,10 @@ Creates a new attachment.
 }
 \examples{
 # Creates an attachment which content is the content of this file,
-# and which name is "model.lp"
+# and which name is "model.lp" (the 3 expressions are equivalent):
 a <- addAttachment(file = "/home/joe/models/model.lp")
+a <- addAttachment(name = "/home/joe/models/model.lp")
+a <- addAttachment("/home/joe/models/model.lp")
 
 # Creates an attachment which content is the specified file, and
 # which name is "model.lp"
@@ -41,5 +46,9 @@ model <- "Minimize
           End"
 a <- addAttachment(name="model.lp",
                    data=charToRaw(model))
+\dontrun{
+# submits and run the specified model.lp:
+job <- client$submitJob(addAttachment("/home/joe/models/model.lp"))
+}
 }
 

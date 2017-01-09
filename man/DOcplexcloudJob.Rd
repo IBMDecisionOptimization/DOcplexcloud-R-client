@@ -3,15 +3,13 @@
 \docType{data}
 \name{DOcplexcloudJob}
 \alias{DOcplexcloudJob}
-\title{The job class. This class is returned by client methods like 
-\code{DOcplexcloudClient.submitJob()} and is used to store information for jobs
-created and executed on DOcplexcloud.}
+\title{The job class.}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 DOcplexcloudJob
 }
 \description{
-The job class. This class is returned by client methods like 
+This class is returned by client methods like 
 \code{DOcplexcloudClient.submitJob()} and is used to store information for jobs
 created and executed on DOcplexcloud.
 }

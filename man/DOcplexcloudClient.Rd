@@ -103,12 +103,15 @@ all jobs for the current user or deleting all jobs.
 
       Returns a character string containing the job logs.
   }
-  \item{\code{createJob(attachments, ...)}}{Creates a new job. The specified list
+  \item{\code{createJob(attachments=NULL, ...)}}{Creates a new job. The specified list
       of attachments is uploaded.
 
       \code{attachments} A list of attachments.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Any extra arguments of type \code{DOcplexcloudAttachment}
+      (for instance, created with \code{link{addAttachment}}) are combined
+      with \code{attachments}. Any other extra parameters are passed to
+      \code{httr}
 
       Returns The job URL.
   }
@@ -171,7 +174,7 @@ all jobs for the current user or deleting all jobs.
 \examples{
 \dontrun{
 # create a new client, using environment variables for url and api key
-client <- DOcplexCloudClient$new()
+client <- DOcplexcloudClient$new()
 
 # create and execute a job to solve model.lp
 job <- client$submitJob(addAttachment(file="model.lp"))
@@ -190,8 +193,6 @@ job <- client$submitJob(addAttachment(name="model.lp",
 # download solution
 solution = client$getAttachment(job, "solution.json")
 }
-Creates a job.
-
 }
 \keyword{datasets}
 

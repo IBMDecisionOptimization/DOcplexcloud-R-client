@@ -1,6 +1,8 @@
 library(R6)
 
-#' The job class. This class is returned by client methods like 
+#' The job class.
+#'
+#' This class is returned by client methods like 
 #' \code{DOcplexcloudClient.submitJob()} and is used to store information for jobs
 #' created and executed on DOcplexcloud.
 #' 
@@ -13,7 +15,8 @@ library(R6)
 #'                              key='Your DOcplexcloud api key')
 #'
 #' # create job and wait for completion
-#' job <- client$submitJob(attachments=c(addAttachment(file="model.lp")))
+#' job <- client$submitJob(addAttachment(file="model.lp"))
+#' # The job status
 #' status <- job$executionStatus
 #' }
 #' @export

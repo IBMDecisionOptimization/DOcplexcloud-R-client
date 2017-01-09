@@ -178,7 +178,7 @@ getJobUrl <- function(job_or_url) {
 #' @examples
 #' \dontrun{
 #' # create a new client, using environment variables for url and api key
-#' client <- DOcplexCloudClient$new()
+#' client <- DOcplexcloudClient$new()
 #'
 #' # create and execute a job to solve model.lp
 #' job <- client$submitJob(addAttachment(file="model.lp"))
@@ -314,8 +314,6 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                 }
             }
         },
-        #' Creates a job.
-        #'
         createJob = function(attachments=NULL,...) {
             "Creates a job"
             if(self$verbose) {
@@ -354,14 +352,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         uploadAttachment = function(job, attachment, ...) {
             name <- attachment$getName()
             att_url <- paste(getJobUrl(job), "/attachments/", name, "/blob", sep="")
-            if (!is.null(attachment$file) && !(attachment$file == "")) {
-                att_data <- charToRaw(readChar(attachment$file, file.info(attachment$file)$size))
-            } else {
-                att_data <- attachment$data
-            }
-            if (!is.raw(att_data)) {
-              att_data <- as.raw(att_data)
-            }
+            att_data <- attachment$getData()
             if (self$verbose) {
                 cat("Uploading attachment", name, "\n")
             }  
