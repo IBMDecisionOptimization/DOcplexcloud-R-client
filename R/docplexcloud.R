@@ -21,12 +21,12 @@ require(rjson)
 #' job <- client$submitJob(addAttachment(file="model.lp"))
 #'
 #' # wait for the job to complete
-#' status <- waitForCompletion(job)
+#' status <- client$waitForCompletion(job)
 #'
 #' # When solving a .lp file, DOcplexcloud creates an output attachment
 #' # called 'solution.json' with the CPLEXSolution. This download the attachment
 #' # and parse the JSON to a hierarchy of list.
-#' solution <- getAttachment(job, "solution.json")
+#' solution <- client$getAttachment(job, "solution.json")
 #'
 #' # In particular, you can access variables with this:
 #' variables = solution$CPLEXSolution$variables
