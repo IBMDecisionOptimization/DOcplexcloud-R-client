@@ -28,7 +28,8 @@ client <- DOcplexcloudClient(url='Your DOcplexcloud base URL',
                              key='Your DOcplexcloud api key')
 
 # create job and wait for completion
-job <- client$submitJob(attachments=c(addAttachment(file="model.lp")))
+job <- client$submitJob(addAttachment(file="model.lp"))
+# The job status
 status <- job$executionStatus
 }
 }

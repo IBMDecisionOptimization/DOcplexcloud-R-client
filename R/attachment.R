@@ -1,4 +1,5 @@
 library(R6)
+library(tools)
 
 #' The base class for attachments.
 #'
@@ -15,10 +16,10 @@ DOcplexcloudAttachment <- R6Class("DOcplexcloudAttachment",
         file = NULL,
         data = NULL,
         initialize = function(name=NULL, file=NULL, data=NULL) {
-            if (!is.null(name) && is.null(file)) {
-                file <- name
-                name <- NULL
-            }
+            #if (!is.null(name) && is.null(file) && !is.null(data)) {
+            #    file <- name
+            #    name <- NULL
+            #}
             self$name <- name
             self$file <- file
             self$data <- data
@@ -37,10 +38,26 @@ DOcplexcloudAttachment <- R6Class("DOcplexcloudAttachment",
             return(n)
         },
         getData = function() {
-            if (!is.null(self$file) && !(self$file == "")) {
+            if (is.null(self$file) && is.null(self$data) && !is.null(self$name)) {
+                att_data <- charToRaw(readChar(self$name, file.info(self$name)$size))
+            }
+            else if (is.null(self$data) && !is.null(self$file) && !(self$file == "")) {
+                # no data specified -> read file
                 att_data <- charToRaw(readChar(self$file, file.info(self$file)$size))
             } else {
+                # data was specified
                 att_data <- self$data
+                ext <- file_ext(self$getName())
+                if (is.list(att_data)) {
+                    output <- NULL
+                    tryCatch({
+                        output <- tempfile()
+                        write.csv(att_data, output)
+                        att_data <- charToRaw(readChar(output, file.info(output)$size))
+                    }, finally = {
+                        if (!is.null(output)) file.remove(output)
+                    }) 
+                }
             }
             if (!is.raw(att_data)) {
               att_data <- as.raw(att_data)
@@ -58,7 +75,8 @@ DOcplexcloudAttachment <- R6Class("DOcplexcloudAttachment",
 #'   specified, the content of the file pointed by \code{name} is used as
 #'   attachment data.
 #' @param file The name of the file containing the data for the attachment.
-#' @param data The raw data for the attachment.
+#' @param data The data for the attachment. If \code{data} is a list which
+#'   \code{names(data)} is not empty, the data is first converted to csv.
 #' @return An attachment object suitable to use with methods of
 #'    DOcplexcloudClient and DOcplexcloudJob
 #'

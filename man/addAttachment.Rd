@@ -15,7 +15,8 @@ attachment data.}
 
 \item{file}{The name of the file containing the data for the attachment.}
 
-\item{data}{The raw data for the attachment.}
+\item{data}{The data for the attachment. If \code{data} is a list which
+\code{names(data)} is not empty, the data is first converted to csv.}
 }
 \value{
 An attachment object suitable to use with methods of

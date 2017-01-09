@@ -352,10 +352,10 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         uploadAttachment = function(job, attachment, ...) {
             name <- attachment$getName()
             att_url <- paste(getJobUrl(job), "/attachments/", name, "/blob", sep="")
-            att_data <- attachment$getData()
             if (self$verbose) {
                 cat("Uploading attachment", name, "\n")
             }  
+            att_data <- attachment$getData()
             response <- self$makeRequest("PUT",
                                      url = att_url,
                                      fail_message = "upload attachment to url",
