@@ -14,6 +14,9 @@ This library requires R 3.2 or later.
 
 You can install the library from github:
 
+    if(!require(devtools)){
+        install.packages("devtools")
+    }
     library(devtools)
     install_github("https://github.ibm.com/IBMDecisionOptimization/DOcplexcloud-R-client")
 

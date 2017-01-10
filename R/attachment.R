@@ -1,5 +1,4 @@
 library(R6)
-library(tools)
 
 #' The base class for attachments.
 #'
@@ -47,7 +46,6 @@ DOcplexcloudAttachment <- R6Class("DOcplexcloudAttachment",
             } else {
                 # data was specified
                 att_data <- self$data
-                ext <- file_ext(self$getName())
                 if (is.list(att_data)) {
                     output <- NULL
                     tryCatch({
