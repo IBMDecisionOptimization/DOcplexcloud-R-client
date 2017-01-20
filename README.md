@@ -1,6 +1,6 @@
 # IBM Decision Optimization on Cloud R Client
 
-IBM Decision Optimization on Cloud (DOcplexcloud) allows you to solve optimization
+IBM Decision Optimization on Cloud (DOcplexcloud) enables you to solve optimization
 problems on the cloud without installing or configuring a solver. We handle
 the connection so that you can jump into coding faster.
 
@@ -26,7 +26,7 @@ Samples can be downloaded from the IBM Decision Optimization [GitHub repository]
 
 [The predict accidents](https://github.ibm.com/IBMDecisionOptimization/DOcplexcloud-predict-accidents-sample)
 sample is a fully featured [Shiny](<https://shiny.rstudio.com/>)
-application using IBM Decision Optimization on Cloud solve service.
+application using the IBM Decision Optimization on Cloud solve service.
 
 ## Get your IBM Decision Optimization on Cloud API key
    
