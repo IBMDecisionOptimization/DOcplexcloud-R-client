@@ -3,32 +3,32 @@ require(rjson)
 
 #' IBM Decision Optimization on Cloud R Client
 #'
-#' IBM Decision Optimization on Cloud (DOcplexcloud) allows you to solve
+#' IBM Decision Optimization on Cloud (DOcplexcloud) enables you to solve
 #' optimization problems on the cloud without installing or configuring a
 #' solver.
 #'
-#' This client handle the connection for you so that you can jump into coding
+#' This client handles the connection for you so that you can jump into coding
 #' faster.
 #'
 #' @docType package
 #' @name docplexcloud
 #' @examples
 #' \dontrun{
-#' # create a new client, using environment variables for url and api key
+#' # Create a new client, using environment variables for URL and API key
 #' client <- DOcplexCloudClient$new()
 #'
-#' # create and execute a job to solve model.lp
+#' # Create and run a job to solve model.lp
 #' job <- client$submitJob(addAttachment(file="model.lp"))
 #'
-#' # wait for the job to complete
+#' # Wait for the job to complete
 #' status <- client$waitForCompletion(job)
 #'
-#' # When solving a .lp file, DOcplexcloud creates an output attachment
-#' # called 'solution.json' with the CPLEXSolution. This download the attachment
-#' # and parse the JSON to a hierarchy of list.
+#' # When solving an .lp file, DOcplexcloud creates an output attachment
+#' # called 'solution.json' with the CPLEXSolution. This downloads the attachment
+#' # and parses the JSON to a hierarchy of lists.
 #' solution <- client$getAttachment(job, "solution.json")
 #'
-#' # In particular, you can access variables with this:
+#' # In particular, you can access variables like this:
 #' variables = solution$CPLEXSolution$variables
 #' }
 NULL

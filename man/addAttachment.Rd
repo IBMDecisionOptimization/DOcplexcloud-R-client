@@ -8,36 +8,36 @@ addAttachment(name = NULL, file = NULL, data = NULL)
 }
 \arguments{
 \item{name}{The name of the attachment. If a \code{file} is specified,
-the name can be ommited and the basename of the \code{file} is used.
-If \code{name} is a string pointing to a file, and \code{file} is not
+the name can be omitted and the basename of the \code{file} is used.
+If \code{name} is a string pointing to a file and \code{file} is not
 specified, the content of the file pointed by \code{name} is used as
 attachment data.}
 
 \item{file}{The name of the file containing the data for the attachment.}
 
-\item{data}{The data for the attachment. If \code{data} is a list which
+\item{data}{The data for the attachment. If \code{data} is a list in which
 \code{names(data)} is not empty, the data is first converted to csv.}
 }
 \value{
-An attachment object suitable to use with methods of
-   DOcplexcloudClient and DOcplexcloudJob
+An attachment object suitable for use with methods of
+   \code{DOcplexcloudClient} and \code{DOcplexcloudJob}.
 }
 \description{
 Creates a new attachment.
 }
 \examples{
-# Creates an attachment which content is the content of this file,
-# and which name is "model.lp" (the 3 expressions are equivalent):
+# Creates an attachment whose content is the content of this file,
+# and whose name is "model.lp" (the 3 expressions are equivalent):
 a <- addAttachment(file = "/home/joe/models/model.lp")
 a <- addAttachment(name = "/home/joe/models/model.lp")
 a <- addAttachment("/home/joe/models/model.lp")
 
-# Creates an attachment which content is the specified file, and
-# which name is "model.lp"
+# Creates an attachment whose content is the specified file, and
+# whose name is "model.lp"
 a <- addAttachment(name = "model.lp",
                    file = "/home/joe/models/model_1231.lp")
 
-# create an attachment which data is stored in memory
+# Create an attachment whose data is stored in memory
 model <- "Minimize
             obj: x + y
           Subject To
@@ -48,7 +48,7 @@ model <- "Minimize
 a <- addAttachment(name="model.lp",
                    data=charToRaw(model))
 \dontrun{
-# submits and run the specified model.lp:
+# Submits and runs the specified model.lp:
 job <- client$submitJob(addAttachment("/home/joe/models/model.lp"))
 }
 }

@@ -17,7 +17,7 @@ Imports:
     R6
 Suggests:
     testthat
-Description: The IBM Decision Optimization on Cloud (DOcplexcloud) client allows
+Description: The IBM Decision Optimization on Cloud (DOcplexcloud) client enables
     you to easily submit and monitor optimization problems on DOcplexcloud.
 License: Apache License (== 2.0) | file LICENSE
 Encoding: UTF-8

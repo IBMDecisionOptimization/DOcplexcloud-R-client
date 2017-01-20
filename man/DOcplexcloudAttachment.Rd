@@ -15,7 +15,7 @@ The base class for attachments.
 
 \describe{
 \item{\code{name}}{The name of the attachment. If a \code{file} is specified,
-the name can be ommited and the basename of the \code{file} is used.}
+the name can be omitted and the basename of the \code{file} is used.}
 
 \item{\code{file}}{The name of the file containing the data for the attachment.}
 

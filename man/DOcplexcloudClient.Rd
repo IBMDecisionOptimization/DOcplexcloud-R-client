@@ -10,62 +10,62 @@ DOcplexcloudClient
 }
 \description{
 The client makes it easier to work with the
-solve service by encapsulating connection parameters (connection URL, api key)
-and provides support for features of DOcplexcloud solve service not tied to a
-particular job, like listing
-all jobs for the current user or deleting all jobs.
+solve service by encapsulating the connection parameters (connection URL, API key).
+The client also provides support for features of the DOcplexcloud solve service
+that are not tied to a particular job, such as listing
+all of the jobs for the current user or deleting all jobs.
 }
 \section{Fields}{
 
 \describe{
 \item{\code{url}}{The DOcplexcloud URL.}
 
-\item{\code{key}}{The DOcplexcloud api key.}
+\item{\code{key}}{The DOcplexcloud API key.}
 
 \item{\code{verbose}}{If TRUE, sets the verbose mode.}
 }}
 \section{Methods}{
 
 \describe{
-  \item{\code{new(url, key, verbose=FALSE)}}{Initialize a new client with
+  \item{\code{new(url, key, verbose=FALSE)}}{Initializes a new client with
       the specified \code{url} and \code{key} parameters.
 
       If \code{url} is not specified, the value of environment variable
       \code{DOCPLEXCLOUD_URL} is used. If \code{key} is not specified, the
-      value of environment variable \code{key} is used.
+      value of the environment variable \code{key} is used.
 
-      When \code{verbose} is TRUE, extra information is printed when the
+      When \code{verbose} is \code{TRUE}, extra information is printed when the
       client API is called.
   }
-  \item{\code{submitJob(..., wait=TRUE)}}{Submits a job execution.
+  \item{\code{submitJob(..., wait=TRUE)}}{Submits a job for execution.
 
-      This method creates the job, upoads the attachments, submit an execution
-      request, then wait for completion of the job, unless \code{wait} is
+      This method creates the job, upoads the attachments, submits an execution
+      request, then waits for completion of the job, unless \code{wait} is
       \code{FALSE}.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
 
       Returns a \code{DOcplexcloudJob}.
   }
   \item{\code{getAllJobs(...)}}{Returns all jobs for the current user.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
    }
   \item{\code{deleteAllJobs(...)}}{Delete all jobs for the current user.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
   }
   \item{\code{waitForCompletion(job, waittime=Inf, ...)}}{
-      Wait for the specified \code{job} to complete.
+      Waits for the specified \code{job} to complete.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
-      \code{waittime} The maximum time to wait, in seconds. This default to
+      \code{waittime} The maximum time to wait, in seconds. This default is
       \code{Inf} if not specified.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
 
-      Upon time out, the last known execution status of the job is returned. 
+      Upon a time out, the last known execution status of the job is returned.
 
       Returns the job execution status, which can be: \code{CREATED},
       \code{NOT_STARTED}, \code{RUNNING}, \code{INTERRUPTING},
@@ -75,31 +75,31 @@ all jobs for the current user or deleting all jobs.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
   }
   \item{\code{deleteJob(job, ...)}}{Deletes the specified job.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
   }
   \item{\code{executeJob(job, ...)}}{Submits an execution request for a job.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
   }
   \item{\code{getJobStatus(job, ...)}}{Returns the execution status of a job.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
   }
-  \item{\code{getJobLogs(job, ...)}}{Download the logs for the job.
+  \item{\code{getJobLogs(job, ...)}}{Downloads the logs for the job.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
 
       Returns a character string containing the job logs.
   }
@@ -111,7 +111,7 @@ all jobs for the current user or deleting all jobs.
       \code{...} Any extra arguments of type \code{DOcplexcloudAttachment}
       (for instance, created with \code{link{addAttachment}}) are combined
       with \code{attachments}. Any other extra parameters are passed to
-      \code{httr}
+      \code{httr}.
 
       Returns The job URL.
   }
@@ -123,40 +123,40 @@ all jobs for the current user or deleting all jobs.
       \code{attachment} A \code{DOcplexcloudAttachment} attachment
       specification. See \code{\link{addAttachment}}.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
   }
   \item{\code{getAttachment(job, name, convert=TRUE, ...)}}{
       Downloads the specified attachment.
 
       Attachments are always returned as raw data, unless
       the attachment ends with ".json". In that case, the
-      json is downloaded, parsed and converted from JSON,
-      unless \code{convert} is false
+      JSON file is downloaded, parsed, and converted from JSON,
+      unless \code{convert} is false.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
       \code{name} The name of the attachement.
 
-      \code{convert} If TRUE, the method try to convert the attachment to a
-      data structure ready for use (example: parse JSON).
+      \code{convert} If TRUE, the method tries to convert the attachment to a
+      data structure that is ready for use (example: parse JSON).
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
   }
   \item{\code{getJobInfo(job, ...)}}{Returns job info for the specified job.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
   }
   \item{\code{copyJob(job, shallow=FALSE, overide_data="", ...)}}{
       Creates a new job by copying an existing job.
 
       The existing job must not be running or waiting for execution. All creation
       data are copied over to the new job. By default, the input attachments and
-      their contents are copied in the new job. If a shallow copy is requested the
-      new attachment will point to the existing job, and if it is deleted accessing
+      their contents are copied in the new job. If a shallow copy is requested, the
+      new attachment will point to the existing job, and, if it is deleted, accessing
       the attachment wil raise an exception. Output attachments are not copied.
-      Optionally, a job creation data can be passed to override the parameters and
+      Optionally, job creation data can be passed to override the parameters and
       declare additional or replacement input attachments.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
@@ -165,7 +165,7 @@ all jobs for the current user or deleting all jobs.
 
       \code{override_data} Data to override as a JSON formatted string.
 
-      \code{...} Extra parameters passed to \code{httr}
+      \code{...} Extra parameters passed to \code{httr}.
 
       Returns The job URL.
   }
@@ -173,13 +173,13 @@ all jobs for the current user or deleting all jobs.
 }
 \examples{
 \dontrun{
-# create a new client, using environment variables for url and api key
+# Create a new client, using environment variables for URL and API key
 client <- DOcplexcloudClient$new()
 
-# create and execute a job to solve model.lp
+# Create and execute a job to solve model.lp
 job <- client$submitJob(addAttachment(file="model.lp"))
 
-# create and execute a job which model is stored
+# Create and execute a job which model is stored
 # in memory
 model <- "Minimize
             obj: x + y
@@ -190,7 +190,7 @@ model <- "Minimize
           End"
 job <- client$submitJob(addAttachment(name="model.lp",
                                       data=charToRaw(model)))
-# download solution
+# Download solution
 solution = client$getAttachment(job, "solution.json")
 }
 }
