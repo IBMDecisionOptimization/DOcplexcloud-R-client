@@ -18,13 +18,13 @@ You can install the library from github:
         install.packages("devtools")
     }
     library(devtools)
-    install_github("https://github.ibm.com/IBMDecisionOptimization/DOcplexcloud-R-client")
+    install_github("https://github.com/IBMDecisionOptimization/DOcplexcloud-R-client")
 
 ## Download samples
 
 Samples can be downloaded from the IBM Decision Optimization [GitHub repository](<https://github.com/IBMDecisionOptimization/>).
 
-[The predict accidents](https://github.ibm.com/IBMDecisionOptimization/DOcplexcloud-predict-accidents-sample)
+[The predict accidents](https://github.com/IBMDecisionOptimization/DOcplexcloud-R-predict-accidents-sample)
 sample is a fully featured [Shiny](<https://shiny.rstudio.com/>)
 application using the IBM Decision Optimization on Cloud solve service.
 
