@@ -1,0 +1,9 @@
+{
+	"provider": ["IBM"], 
+	"name":  "DOplexcloud R client" ,
+	"model": [ "CPLEX" ],
+	"development": [ "R" ],
+	"category": [ {"CLIENT":[]} ],
+	"industry": [ "Operational research" ],
+	"abstract": "The R client to submit optimization problems to the IBM Decision Optimization on Cloud service."
+}
