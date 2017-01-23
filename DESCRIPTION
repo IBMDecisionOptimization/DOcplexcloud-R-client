@@ -1,7 +1,7 @@
 Package: docplexcloud
 Type: Package
 Title: The 'IBM Decision Optimization on Cloud' Client
-Version: 0.1.0
+Version: 1.0.0
 Author: Viu-Long Kong [aut, cre],
     The IBM DOcplexcloud on Cloud team [ctb, cph]
 Authors@R: c(person("Viu-Long", "Kong", role = c("aut", "cre"),
