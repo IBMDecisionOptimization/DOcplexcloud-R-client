@@ -47,6 +47,9 @@ getJobUrl <- function(job_or_url) {
 #'       request, then waits for completion of the job, unless \code{wait} is
 #'       \code{FALSE}.
 #'
+#'       \code{compression} The compression algorithm used to compress data before
+#'       it is send. The \code{compression} can be "none" or "gzip"
+#'
 #'       \code{...} Extra parameters passed to \code{httr}.
 #'
 #'       Returns a \code{DOcplexcloudJob}.
@@ -107,10 +110,13 @@ getJobUrl <- function(job_or_url) {
 #'
 #'       Returns a character string containing the job logs.
 #'   }
-#'   \item{\code{createJob(attachments=NULL, ...)}}{Creates a new job. The specified list
+#'   \item{\code{createJob(attachments=NULL, compression="gzip",...)}}{Creates a new job. The specified list
 #'       of attachments is uploaded.
 #'
 #'       \code{attachments} A list of attachments.
+#'
+#'       \code{compression} The compression algorithm used to compress data before
+#'       it is send. The \code{compression} can be "none" or "gzip"
 #'
 #'       \code{...} Any extra arguments of type \code{DOcplexcloudAttachment}
 #'       (for instance, created with \code{link{addAttachment}}) are combined
@@ -119,13 +125,17 @@ getJobUrl <- function(job_or_url) {
 #'
 #'       Returns The job URL.
 #'   }
-#'   \item{\code{uploadAttachment(job, attachment, ...)}}{
-#'       Uploads the specified attachment for a job.
+#'   \item{\code{uploadAttachment(job, attachment, compression="gzip", ...)}}{
+#'       Uploads the specified attachment for a job. Data are compressed using
+#'       the specified \code{compression}.
 #'
 #'       \code{job} The \code{DOcplexcloudJob} or a job URL.
 #'
 #'       \code{attachment} A \code{DOcplexcloudAttachment} attachment
 #'       specification. See \code{\link{addAttachment}}.
+#'
+#'       \code{compression} Specifies the compression algorithm to use. Currently,
+#'       supported values are: "none" or "gzip"
 #'
 #'       \code{...} Extra parameters passed to \code{httr}.
 #'   }
@@ -314,7 +324,7 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
                 }
             }
         },
-        createJob = function(attachments=NULL,...) {
+        createJob = function(attachments=NULL, compression="gzip",...) {
             "Creates a job"
             if(self$verbose) {
                 cat("Creating job\n")
@@ -345,21 +355,42 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
             # now upload attachments
             for (a in attachments)
             {
-                self$uploadAttachment(joburl, attachment=a)
+                self$uploadAttachment(joburl, attachment=a, compression=compression)
             }
             return(joburl)
         },
-        uploadAttachment = function(job, attachment, ...) {
+        uploadAttachment = function(job, attachment, compression="gzip", ...) {
             name <- attachment$getName()
             att_url <- paste(getJobUrl(job), "/attachments/", name, "/blob", sep="")
             if (self$verbose) {
                 cat("Uploading attachment", name, "\n")
             }
             att_data <- attachment$getData()
+            
+            # attachments are all supposed to be octet-stream
+            h = list();
+            h["Content-Type"] <- "application/octet-stream";
+            if (compression == "gzip") {
+                # when compressing is wanted, and is gzip, gzip the stream
+                # we need to do that in an actual file to have file headers etc
+                h["Content-Encoding"] <- compression;
+                output <- NULL
+                tryCatch({
+                    output <- tempfile()
+                    gzo = gzfile(output, "wb");
+                    writeBin(att_data, gzo);
+                    close(gzo);
+                    att_data <- readBin(file(output, "rb"), what="raw", n=file.info(output)$size)
+                }, finally = {
+                  if (!is.null(output)) file.remove(output)
+                })
+            }
+            
             response <- self$makeRequest("PUT",
                                      url = att_url,
                                      fail_message = "upload attachment to url",
-                                     content_type("application/octet-stream"),
+                                     do.call(add_headers, h),
+                                     #content_type("application/octet-stream"),
                                      ...,
                                      body=att_data)
             return(response)
@@ -409,13 +440,13 @@ DOcplexcloudClient <- R6Class("DOcplexcloudClient",
         #
         # Utility methods
         #
-        submitJob = function(..., wait = TRUE) {
+        submitJob = function(..., compression="gzip", wait = TRUE) {
             "Submits a job for execution and wait for completion"
             dots <- list(...)
             attachments <- Filter(function(d) { inherits(d, "DOcplexcloudAttachment")}, dots)
 
             job <- DOcplexcloudJob$new()
-            job$joburl <- self$createJob(attachments=attachments)
+            job$joburl <- self$createJob(attachments=attachments, compression=compression)
             response <- self$executeJob(job$joburl)
             if (wait) {
                 status <- self$waitForCompletion(job$joburl)

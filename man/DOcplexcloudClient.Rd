@@ -43,6 +43,9 @@ all of the jobs for the current user or deleting all jobs.
       request, then waits for completion of the job, unless \code{wait} is
       \code{FALSE}.
 
+      \code{compression} The compression algorithm used to compress data before
+      it is send. The \code{compression} can be "none" or "gzip"
+
       \code{...} Extra parameters passed to \code{httr}.
 
       Returns a \code{DOcplexcloudJob}.
@@ -103,10 +106,13 @@ all of the jobs for the current user or deleting all jobs.
 
       Returns a character string containing the job logs.
   }
-  \item{\code{createJob(attachments=NULL, ...)}}{Creates a new job. The specified list
+  \item{\code{createJob(attachments=NULL, compression="gzip",...)}}{Creates a new job. The specified list
       of attachments is uploaded.
 
       \code{attachments} A list of attachments.
+
+      \code{compression} The compression algorithm used to compress data before
+      it is send. The \code{compression} can be "none" or "gzip"
 
       \code{...} Any extra arguments of type \code{DOcplexcloudAttachment}
       (for instance, created with \code{link{addAttachment}}) are combined
@@ -115,13 +121,17 @@ all of the jobs for the current user or deleting all jobs.
 
       Returns The job URL.
   }
-  \item{\code{uploadAttachment(job, attachment, ...)}}{
-      Uploads the specified attachment for a job.
+  \item{\code{uploadAttachment(job, attachment, compression="gzip", ...)}}{
+      Uploads the specified attachment for a job. Data are compressed using
+      the specified \code{compression}.
 
       \code{job} The \code{DOcplexcloudJob} or a job URL.
 
       \code{attachment} A \code{DOcplexcloudAttachment} attachment
       specification. See \code{\link{addAttachment}}.
+
+      \code{compression} Specifies the compression algorithm to use. Currently,
+      supported values are: "none" or "gzip"
 
       \code{...} Extra parameters passed to \code{httr}.
   }
