@@ -18,7 +18,7 @@ case $1 in
         R CMD build .
         ;;
     check)
-        R CMD check --as-cran --no-manual docplexcloud_0.1.0.tar.gz
+        R CMD check --as-cran --no-manual docplexcloud_1.0.0.tar.gz
         ;;
     *) 
         echo "`basename ${0}`: usage: (build|check)"
