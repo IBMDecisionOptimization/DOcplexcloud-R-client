@@ -18,7 +18,7 @@ You can install the library from github:
         install.packages("devtools")
     }
     library(devtools)
-    install_github("https://github.com/IBMDecisionOptimization/DOcplexcloud-R-client")
+    install_github("IBMDecisionOptimization/DOcplexcloud-R-client")
 
 ## Download samples
 
