@@ -22,6 +22,7 @@ created and executed on DOcplexcloud.
 
 \item{\code{exectutionStatus}}{The execution status if the job has been executed.}
 }}
+
 \examples{
 \dontrun{
 client <- DOcplexcloudClient(url='Your DOcplexcloud base URL',
@@ -34,4 +35,3 @@ status <- job$executionStatus
 }
 }
 \keyword{datasets}
-

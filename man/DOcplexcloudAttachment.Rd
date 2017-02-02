@@ -21,5 +21,5 @@ the name can be omitted and the basename of the \code{file} is used.}
 
 \item{\code{data}}{The raw data for the attachment.}
 }}
-\keyword{internal}
 
+\keyword{internal}

@@ -5,15 +5,14 @@ Version: 1.0.0
 Author: Viu-Long Kong [aut, cre],
     The IBM DOcplexcloud on Cloud team [ctb, cph]
 Authors@R: c(person("Viu-Long", "Kong", role = c("aut", "cre"),
-    email = "viulong.kong@fr.ibm.com"),
+      email = "viulong.kong@fr.ibm.com"),
     person("The IBM DOcplexcloud on Cloud team", "",
-    role = c("ctb", "cph"),
-    email = "docloud@wwpdl.vnet.ibm.com"))
+      role = c("ctb", "cph"),
+      email = "docloud@wwpdl.vnet.ibm.com"))
 Maintainer: Viu-Long Kong <viulong.kong@fr.ibm.com>
-Depends:
-    httr,
-    rjson
 Imports:
+    httr,
+    rjson,
     R6
 Suggests:
     testthat
@@ -23,4 +22,4 @@ License: Apache License (== 2.0) | file LICENSE
 Encoding: UTF-8
 LazyData: true
 URL: https://onboarding-oaas.docloud.ibmcloud.com/software/analytics/docloud/
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.0

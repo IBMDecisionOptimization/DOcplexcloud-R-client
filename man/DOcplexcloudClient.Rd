@@ -24,6 +24,7 @@ all of the jobs for the current user or deleting all jobs.
 
 \item{\code{verbose}}{If TRUE, sets the verbose mode.}
 }}
+
 \section{Methods}{
 
 \describe{
@@ -181,6 +182,7 @@ all of the jobs for the current user or deleting all jobs.
   }
 }
 }
+
 \examples{
 \dontrun{
 # Create a new client, using environment variables for URL and API key
@@ -205,4 +207,3 @@ solution = client$getAttachment(job, "solution.json")
 }
 }
 \keyword{datasets}
-

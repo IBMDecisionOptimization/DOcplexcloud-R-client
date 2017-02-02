@@ -34,4 +34,3 @@ solution <- client$getAttachment(job, "solution.json")
 variables = solution$CPLEXSolution$variables
 }
 }
-

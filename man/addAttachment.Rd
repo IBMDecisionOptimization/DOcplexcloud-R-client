@@ -52,4 +52,3 @@ a <- addAttachment(name="model.lp",
 job <- client$submitJob(addAttachment("/home/joe/models/model.lp"))
 }
 }
-

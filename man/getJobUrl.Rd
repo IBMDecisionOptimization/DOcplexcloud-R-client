@@ -10,4 +10,3 @@ getJobUrl(job_or_url)
 Returns the joburl if a DOcplexcloudJob is passed. Otherwise return the arg.
 }
 \keyword{internal}
-
