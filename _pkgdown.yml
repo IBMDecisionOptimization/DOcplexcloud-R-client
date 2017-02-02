@@ -1,0 +1,17 @@
+templates:
+  params:
+    bootswatch: cerulean
+
+navbar:
+  title: "DOcplexcloud"
+  type: inverse
+  left:
+    - text: "Reference"
+      href: "reference/index.html"
+  right:
+    - icon: fa-github
+      href: https://github.com/IBMDecisionOptimization/DOcplexcloud-R-client
+home:
+  links:
+    - text: IBM Decision Optimization on Cloud home page
+      href: https://developer.ibm.com/docloud/
